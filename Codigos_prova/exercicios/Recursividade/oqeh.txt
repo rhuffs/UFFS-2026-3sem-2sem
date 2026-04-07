@@ -1,0 +1,4 @@
+15) O que é uma função recursiva?
+Explique o conceito de caso base.
+
+o caso base e a condição de parada da recursividade 

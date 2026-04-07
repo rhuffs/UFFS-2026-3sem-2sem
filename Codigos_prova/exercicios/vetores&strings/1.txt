@@ -1,0 +1,8 @@
+7) Dado:
+
+int v[5] = {1,2,3,4,5};
+
+a) Qual o valor de v[2]?
+o valor de v[2] é 3 pois v[0] = 1. v[1]=2 ,v[2 ] = 3
+b) Qual a diferença entre v e &v[0]?
+como vetore sao ponteiros disfarçados &v[0] vai pegar o enderço onde esta armazenado o valor inteiro de posicao 0

@@ -1,0 +1,5 @@
+explique o conceito de TAD
+
+TAD = TIPO ABSTRADO DE DADOS
+
+criar tipos de dados que nao sao os convencionais para facilita e organizar melhor o trabalho

@@ -1,0 +1,10 @@
+9) Dado:
+
+char nome[] = "UFFS";
+
+a) Quantos caracteres existem na string?
+5 caracteres, 4 visiveis e um invisivel
+b) Qual é o caractere final invisível?
+\0
+c) Por que ele é importante?
+ele define o final do vetor de char
