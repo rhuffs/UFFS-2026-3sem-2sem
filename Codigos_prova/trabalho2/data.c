@@ -16,7 +16,7 @@ int getDate(data d1, char info ){
 }
 
 void showDate(data d1){
-    printf("%d / %d / %d", d1.dia, d1.mes, d1.ano);
+    printf("%d/%d/%d \n", d1.dia, d1.mes, d1.ano);
 }
 
 int dataComp(data d1, data d2){
