@@ -4,11 +4,13 @@
 
 int main() {
 
-  data d1, d2;
+  data d1, d2, d3;
 
   setDate(&d1,11,9,2011);
 
   setDate(&d2,12,5,2007);
+
+  setDate(&d3,29,2,2024);
 
   showDate(d1);
   showDate(d2);
@@ -34,6 +36,12 @@ int main() {
     printf("Não é bissexto\n");
   }
   
+  if (isLeapYear(d3))
+  {
+    printf("é um ano bissexto \n");
+  } else {
+    printf("Não é bissexto\n");
+  }
 
   printf("Dias passados desde o inicio do ano : %d\n",getDayFromYear(d1));
   printf("Dias passados desde o inicio do ano : %d\n",getDayFromYear(d2));
