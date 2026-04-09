@@ -83,7 +83,7 @@ int getDaysBeforeMonth(data d1){
 }
 
 int getDayFromYear(data d1){
-    int diasDoAno;
+    int diasDoAno = 0;
     diasDoAno = getDaysBeforeMonth(d1) + d1.dia;
     return diasDoAno;
 }
@@ -97,6 +97,9 @@ int getDiff(data d1, data d2){
     int totald1 = 0;
     int totald2 = 0;
     data base;
+    base.ano = 1;
+    base.mes = 1;
+    base.dia = 1;
     
     for (int i = 0 ; i <= anosd1; i++){
         base.ano = i;
