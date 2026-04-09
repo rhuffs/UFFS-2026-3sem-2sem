@@ -1,18 +1,17 @@
 #include <stdio.h>
-#include <data.h>
+#include "data.h"
 
 
-void setDate(data *data, int d, int m, int a){
-    data->dia = d;
-    data->mes = m;
-    data->ano = a;
+void setDate(data *date, int d, int m, int a){
+    date->dia = d;
+    date->mes = m;
+    date->ano = a;
 }
 
 int getDate(data d1, char info ){
-    if (info == "D") return d1.dia;
-    if (info == "M") return d1.mes;
-    if (info == "Y") return d1.ano;
-    printf("Nao é um valor válido");
+    if (info == 'D') return d1.dia;
+    if (info == 'M') return d1.mes;
+    if (info == 'Y') return d1.ano;
     return 0;
 }
 
@@ -83,15 +82,45 @@ int getDaysBeforeMonth(data d1){
 
 }
 
-int getDayFromYear(data d1){
-    int diaDoAno;
-    diaDoAno = getDaysOfMonth(d1) + d1.dia;
-    return diaDoAno;
+int getDaysFromYear(data d1){
+    int diasDoAno;
+    diasDoAno = getDaysBeforeMonth(d1) + d1.dia;
+    return diasDoAno;
 }
 
 int getDiff(data d1, data d2){
-    int totalDia;
-    if (dataComp(d1,d2) == 1){
-        
+    
+    int anosd1 = d1.ano - 1;
+    int anosd2 = d2.ano -1;
+    int diasPorAnod1 = 0;
+    int diasPorAnod2 = 0;
+    int totald1 = 0;
+    int totald2 = 0;
+    data base;
+    
+    for (int i = 0 ; i <= anosd1; i++){
+        base.ano = i;
+        if (isLeapYear(base)){
+            diasPorAnod1 += 366;
+        } else {
+            diasPorAnod1 +=365;
+        }
     }
+
+    for (int i = 0 ; i <= anosd2; i++){
+        base.ano = i;
+        if (isLeapYear(base)){
+            diasPorAnod2 += 366;
+        } else {
+            diasPorAnod2 +=365;
+        }
+    }
+
+    totald1 = diasPorAnod1 + getDaysFromYear(d1);
+    totald2 = diasPorAnod2 + getDaysFromYear(d2);
+
+    if(dataComp(d1,d2) == 1 ) return totald1 - totald2;
+    if(dataComp(d1,d2) == -1 ) return totald2 - totald1;
+    return 0;
+
 }
