@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug C",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/programa",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "MIMode": "gdb"
+        }
+    ]
+}
