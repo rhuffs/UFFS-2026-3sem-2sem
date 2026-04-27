@@ -17,8 +17,8 @@ module tb_shift_reg_16;
     always #5 clk = ~clk;
 
     initial begin
-      $dumpfile("dump.vcd"); 
-      $dumpvars(0, tb_shift_reg_16);
+        $dumpfile("dump.vcd"); 
+        $dumpvars(0, tb_shift_reg_16);
         clk = 0;
         rst_n = 1;
         mode = 2'b00;
