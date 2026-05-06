@@ -1,3 +1,6 @@
+// Nome: Rhuan Leandro Paiva && Henrique Schmitz Nilson
+// link do youtube : https://youtube.com/shorts/Uorsnw_xdus?si=GAvxbkOYuRKjajb3
+
 `timescale 1ns/1ps
 module tbConta_portas;
 

@@ -1,3 +1,5 @@
+// Nome: Rhuan Leandro Paiva && Henrique Schmitz Nilson
+// link do youtube: https://youtu.be/2pkWIt334uQ?si=YpB4Z-WWOUQv7UHY
 `timescale 1ns/1ps
 module bcd_portas(
     input [9:0] SW,
@@ -6,7 +8,7 @@ module bcd_portas(
     output reg [6:0] HEX2,
     output reg [6:0] HEX3
 );
-// link do youtube: https://youtu.be/2pkWIt334uQ?si=YpB4Z-WWOUQv7UHY
+
 reg [3:0] conta_SW;
 
 always @(*) begin
