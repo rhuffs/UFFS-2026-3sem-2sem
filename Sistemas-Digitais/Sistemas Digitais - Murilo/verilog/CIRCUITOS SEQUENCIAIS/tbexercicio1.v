@@ -1,22 +1,33 @@
 `timescale 1ps/1ps
 
+
+//testbench registrador de 16 bits
 module tb_shift_reg_16;
+
     reg clk;
     reg rst_n;
     reg [1:0] mode;
     reg [15:0] d_in;
     wire [15:0] q;
 
+    //Módulo registrador
     shift_reg_16 uut (
         .clk(clk),
+        // .clk - porta do pino
+        // (clk)- o sinal que está indo a porta
         .rst_n(rst_n),
         .mode(mode),
         .d_in(d_in),
         .q(q)
     );
+
     always #5 clk = ~clk;
+    //o bloco always cria um loop infinito que executa repetidamente durante toda a simulação
+    //clk = ~clk -> inverte o valor do clock: clk 1 = ~clk 0; clk 0 = ~clk 1
 
     initial begin
+        //isso cria a EPWave: ações sobre as subidas do intervalo de tempo dos clock
+        
         $dumpfile("dump.vcd"); 
         $dumpvars(0, tb_shift_reg_16);
         clk = 0;
@@ -73,12 +84,12 @@ module tb_shift_reg_16;
         if (q === 16'h0000) $display("Reset efetuado");
         else $display("ERRO: Reset assíncrono falhou");
 
-        $display(" Iniciando 16 ciclos aleatórios:");
+        //inicializando os 16 ciclos aleatórios
         repeat (16) begin
-            @(negedge clk);
-            mode = $random % 4;
-            d_in = $random;
-            $display("T=%0t | Modo=%b | d_in=%h | q=%h", $time, mode, d_in, q);
+            @(negedge clk);//Funcionamento da descida do clock
+            mode = $random % 4;//randomiza a seleção
+            d_in = $random;//randomiza a entrada
+            $display("T(intervalo de tempo) = %0t\n Modo = %b\n d_in = %h q=%h\n", $time, mode, d_in, q);
         end
 
         $finish;

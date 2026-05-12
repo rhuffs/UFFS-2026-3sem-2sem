@@ -7,6 +7,7 @@ module shift_reg_16(
 );
 
 always @(posedge clk or negedge rst_n) begin
+    //reset
     if(!rst_n) begin
         q <= 16'h000;
     end
@@ -28,7 +29,7 @@ always @(posedge clk or negedge rst_n) begin
                 //desloca o bit para equerda
                 q <= {q[14:0], 1'b0};
             end
-            
+            //caso der merda
             default q <= q;
         endcase
     end

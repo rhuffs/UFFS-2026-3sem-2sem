@@ -1,0 +1,42 @@
+|ATIVIDADE1
+SW[0] => Add0.IN2
+SW[0] => resultado.DATAA
+SW[1] => resultado.OUTPUTSELECT
+SW[1] => resultado.OUTPUTSELECT
+SW[2] => resultado.OUTPUTSELECT
+SW[2] => resultado.OUTPUTSELECT
+SW[2] => resultado.OUTPUTSELECT
+SW[3] => resultado.OUTPUTSELECT
+SW[3] => resultado.OUTPUTSELECT
+SW[3] => resultado.OUTPUTSELECT
+SW[3] => resultado.OUTPUTSELECT
+SW[4] => resultado.OUTPUTSELECT
+SW[4] => resultado.OUTPUTSELECT
+SW[4] => resultado.OUTPUTSELECT
+SW[4] => resultado.OUTPUTSELECT
+SW[5] => resultado.OUTPUTSELECT
+SW[5] => resultado.OUTPUTSELECT
+SW[5] => resultado.OUTPUTSELECT
+SW[5] => resultado.OUTPUTSELECT
+SW[6] => resultado.OUTPUTSELECT
+SW[6] => resultado.OUTPUTSELECT
+SW[6] => resultado.OUTPUTSELECT
+SW[6] => resultado.OUTPUTSELECT
+SW[7] => resultado.OUTPUTSELECT
+SW[7] => resultado.OUTPUTSELECT
+SW[7] => resultado.OUTPUTSELECT
+SW[7] => resultado.OUTPUTSELECT
+SW[8] => resultado.OUTPUTSELECT
+SW[8] => resultado.OUTPUTSELECT
+SW[8] => resultado.OUTPUTSELECT
+SW[8] => resultado.OUTPUTSELECT
+SW[9] => resultado.OUTPUTSELECT
+SW[9] => resultado.OUTPUTSELECT
+SW[9] => resultado.OUTPUTSELECT
+SW[9] => resultado.OUTPUTSELECT
+LEDG[0] <= resultado.DB_MAX_OUTPUT_PORT_TYPE
+LEDG[1] <= resultado.DB_MAX_OUTPUT_PORT_TYPE
+LEDG[2] <= resultado.DB_MAX_OUTPUT_PORT_TYPE
+LEDG[3] <= resultado.DB_MAX_OUTPUT_PORT_TYPE
+
+
