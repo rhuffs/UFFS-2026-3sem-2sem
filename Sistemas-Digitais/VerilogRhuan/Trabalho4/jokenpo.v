@@ -1,3 +1,6 @@
+
+//https://youtube.com/shorts/t_KIsTXzRNI?feature=share 
+//Rhuan Leandro paiva
 module logica_jokenpo (
     input [2:0] j1,
     input [2:0] j2,
