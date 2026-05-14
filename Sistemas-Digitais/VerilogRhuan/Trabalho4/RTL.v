@@ -68,7 +68,7 @@ module soma_sub (
         .cout(cout)
     );
 
-    assign overflow = cout ^ resultado[7];
+    assign overflow = (~(a[7] ^ b_mod[7])) & (a[7] ^ resultado[7]);
 
     assign zero = (resultado == 8'b00000000);
 
@@ -174,6 +174,6 @@ module top (
     );
 
     assign HEX2 = 7'b1111111;
-    assign HEX3 = 7'b1111111;
+    assign HEX3 = (SW[8]) ? 7'b0000011 : 7'b0001000;
 
 endmodule

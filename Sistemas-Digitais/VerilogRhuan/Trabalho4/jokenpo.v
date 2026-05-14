@@ -33,7 +33,7 @@ module logica_jokenpo (
     
 endmodule
 
-module Display (
+module top (
     input [9:0] SW,
     output reg [6:0] HEX0,
     output reg [6:0] HEX1,
@@ -54,22 +54,21 @@ module Display (
         case(resultado)
 
             2'b01: begin
-                HEX3 = 7'b1110001;  
-                HEX2 = 7'b1000000;          
-                HEX1 = 7'b0010000;  
+                HEX3 = 7'b1100001;
+                HEX2 = 7'b1000000; 
+                HEX1 = 7'b0010000; 
                 HEX0 = 7'b1111001; 
             end
 
-
             2'b10: begin
-                HEX3 = 7'b1110001; 
+                HEX3 = 7'b1100001; 
                 HEX2 = 7'b1000000; 
                 HEX1 = 7'b0010000; 
                 HEX0 = 7'b0100100; 
             end
 
             default: begin
-                HEX3 = 7'b0000110; 
+                HEX3 = 7'b0000110;
                 HEX2 = 7'b0000110; 
                 HEX1 = 7'b0000110; 
                 HEX0 = 7'b0000110; 
