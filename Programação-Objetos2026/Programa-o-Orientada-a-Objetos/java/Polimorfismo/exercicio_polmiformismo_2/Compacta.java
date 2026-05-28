@@ -1,0 +1,4 @@
+class Compacta extends App {
+    // ...
+}
+

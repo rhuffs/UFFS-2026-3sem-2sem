@@ -1,0 +1,4 @@
+class Processo implements Pausavel {
+    // ...
+}
+

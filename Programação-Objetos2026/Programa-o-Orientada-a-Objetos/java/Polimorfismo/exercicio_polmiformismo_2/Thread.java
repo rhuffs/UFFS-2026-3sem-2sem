@@ -1,0 +1,4 @@
+class Thread extends Processo {
+    // ...
+}
+
