@@ -10,7 +10,7 @@ module gerador_pseudonimo (
 
     always @(posedge clk or posedge rst) begin
         if(rst == 1'b1) LFSR <= 4'b0001;
-        if(enable == 1'b1) LFSR <= {LFSR, msb};
+        else if(enable == 1'b1) LFSR <= {LFSR[2:0], msb};
     end
     assign simbolo_randomico = LFSR[1:0];
 endmodule
@@ -27,7 +27,7 @@ module Memoria_sequencial (
     always @(posedge clk) begin
         if(write_enable == 1'b1) memoria[write_addres] <= write_data;
     end
-    assign read_data = memorai[write_addres];
+    assign read_data = memoria[read_addres];
 endmodule
 
 module Contador_exibicao (
@@ -35,12 +35,16 @@ module Contador_exibicao (
     input rst,
     input clr,
     input increment,
+    input [3:0] Nivel,
+    output fim_exibicao,
     output reg [3:0] S
 );
     always @(posedge clk or posedge rst) begin
-        if(rst == 1'b1 || clk == 1'b1) S <= 4'b0000;
-        if(increment == 1'b1) S <= S + 1'b1;
+        if(rst == 1'b1 || clr == 1'b1) S <= 4'b0000;
+        else if(increment == 1'b1) S <= S + 1'b1;
     end
+
+    assign fim_exibicao = (S == Nivel);
 endmodule
 
 
@@ -48,32 +52,37 @@ endmodule
 module Contador_entrada (
     input clk,
     input rst,
+    input clr,
     input increment,
-    output [3:0] counter
+    input [3:0] Nivel,
+    output fim_entrada,
+    output reg [3:0] counter
 );
     always @(posedge clk or posedge rst) begin
-        if(rst == 1'b1) counter <= 4'b0000;
-        if(increment == 1'b1) counter <= counter + 1;        
+        if(rst == 1'b1 || clr == 1'b1) counter <= 4'b0000;
+        else if(increment == 1'b1) counter <= counter + 1;        
     end
+    assign fim_entrada = (counter == Nivel);
 endmodule
 
 module Registrador_nivel (
     input clk,
     input rst,
     input increment,
-    output [3:0] Nivel
+    output reg [3:0] Nivel
 );
     always @(posedge clk or posedge rst) begin
         if(rst == 1'b1) Nivel <= 4'b0000;
-        if(increment == 1'b1) Nivel <= Nivel + 1;        
+        else if(increment == 1'b1) Nivel <= Nivel + 1;        
     end
 endmodule
 
 module Comparar (
-    input simbolo_esperando,
-    input simbolo_jogado,
+    input [1:0] simbolo_esperando,
+    input [1:0] simbolo_jogado,
     output resultado_comparacao
 );
+
     assign resultado_comparacao = (simbolo_esperando == simbolo_jogado);
 endmodule
 
@@ -116,14 +125,16 @@ module temporizador(
                 end
                 else
                     contador <= contador + 1;
-            end if(INTERVALO == 1'b1) begin
+            end 
+            else if(INTERVALO == 1'b1) begin
                 if(contador >= TEMPO_GAP) begin
                     ENDINTERVALO <= 1;
                     contador <= 0;
                 end
                 else
                     contador <= contador + 1;
-            end if(OFFLED == 1'b1) begin
+            end 
+            else if(OFFLED == 1'b1) begin
                 if(contador >= TEMPO_MAX) begin
                     ENDOFFLED <= 1;
                 end
@@ -138,8 +149,89 @@ module temporizador(
     end
 endmodule
 
-module moduleName (
-    ports
+module hex7seg(
+    input [3:0] valor,
+    output reg [6:0] hex
 );
-    
+    always @(*) begin
+        case(valor)
+            4'h0: hex = 7'b1000000;
+            4'h1: hex = 7'b1111001;
+            4'h2: hex = 7'b0100100;
+            4'h3: hex = 7'b0110000;
+            4'h4: hex = 7'b0011001;
+            4'h5: hex = 7'b0010010;
+            4'h6: hex = 7'b0000010;
+            4'h7: hex = 7'b1111000;
+            4'h8: hex = 7'b0000000;
+            4'h9: hex = 7'b0010000;
+            4'hA: hex = 7'b0001000;
+            4'hB: hex = 7'b0000011;
+            4'hC: hex = 7'b1000110;
+            4'hD: hex = 7'b0100001;
+            4'hE: hex = 7'b0000110;
+            4'hF: hex = 7'b0001110;
+        endcase
+    end
+endmodule
+
+module debouncer (
+    input clk,
+    input rst,
+    input botao,
+    output reg clock
+);
+    reg [19:0] contador;
+    reg estado;
+
+    always @(posedge clk or posedge rst) begin
+        if(rst == 1'b1)begin
+            contador <= 1'b0;
+            estado <= 1'b1;
+            clock <= 1'b0;
+        end else begin
+            clock <= 0;
+
+            if(botao != estado) begin
+                contador <= contador + 1;
+
+                if(contador == 20'd500000) begin
+                    estado <= botao;
+                    contador <= 0;
+                    if(botao == 0) clock <= 1;
+                end
+            end
+
+            else begin
+                contador <= 0;
+            end
+
+        end
+    end
+endmodule
+
+module entrada_jogador(
+    input key0,
+    input key1,
+    input key2,
+    input key3,
+    output reg [1:0] simbolo_jogado,
+    output reg jogada_valida
+);
+
+always @(*) begin
+    jogada_valida = 1'b1;
+    if(key0)
+        simbolo_jogado = 2'd0;
+    else if(key1)
+        simbolo_jogado = 2'd1;
+    else if(key2)
+        simbolo_jogado = 2'd2;
+    else if(key3)
+        simbolo_jogado = 2'd3;
+    else begin
+        simbolo_jogado = 2'd0;
+        jogada_valida = 1'b0;
+    end
+end
 endmodule
