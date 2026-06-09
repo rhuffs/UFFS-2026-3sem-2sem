@@ -30,6 +30,18 @@ module Memoria_sequencial (
     assign read_data = memoria[read_addres];
 endmodule
 
+module Registrador_nivel (
+    input clk,
+    input rst,
+    input increment,
+    output reg [3:0] Nivel
+);
+    always @(posedge clk or posedge rst) begin
+        if(rst == 1'b1) Nivel <= 4'b0000;
+        else if(increment == 1'b1) Nivel <= Nivel + 1;        
+    end
+endmodule
+
 module Contador_exibicao (
     input clk,
     input rst,
@@ -47,8 +59,6 @@ module Contador_exibicao (
     assign fim_exibicao = (S == Nivel);
 endmodule
 
-
-
 module Contador_entrada (
     input clk,
     input rst,
@@ -65,17 +75,7 @@ module Contador_entrada (
     assign fim_entrada = (counter == Nivel);
 endmodule
 
-module Registrador_nivel (
-    input clk,
-    input rst,
-    input increment,
-    output reg [3:0] Nivel
-);
-    always @(posedge clk or posedge rst) begin
-        if(rst == 1'b1) Nivel <= 4'b0000;
-        else if(increment == 1'b1) Nivel <= Nivel + 1;        
-    end
-endmodule
+
 
 module Comparar (
     input [1:0] simbolo_esperando,
@@ -149,7 +149,7 @@ module temporizador(
     end
 endmodule
 
-module hex7seg(
+module D7S(
     input [3:0] valor,
     output reg [6:0] hex
 );
