@@ -49,3 +49,21 @@ Tree *recurinsertNode(Tree *node, Tree *root){
     }
 }
 
+//===================BUSCAS NA ARVORE====================//
+
+//pre order: -- Sequencia que gera a arvore
+//-Visita a raiz
+//-precorre a subarvore esquerda
+//-percorre a subarvore direita
+
+//in order -- coloca em ordem
+//-percorre a bubarvore esquerda
+//-visita a raiz
+//-percorre a subarvore direita
+
+//pos order -- calcular tamnanho das pastas
+//-Percorre a sub arvore esquerda
+//-Percorre a subarvore direita
+//-visita a raiz hehe Six Sevennnn
+
+//hehe meia novi kkkkkk
