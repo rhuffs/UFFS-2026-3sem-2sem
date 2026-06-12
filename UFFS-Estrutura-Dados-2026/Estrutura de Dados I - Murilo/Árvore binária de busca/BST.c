@@ -79,3 +79,47 @@ Tree *getNode(Tree *r, int key){
 }
 
 
+/*=== ÁRVORES DE BUSCA ===*/
+
+// Existem diversas aplicações onde devemos percorrer uma árvore de maneira sistemática, visitando todos os nós da árvore, um a um.
+// Existem três formas de percorrer uma árvore binária:
+// Pré-order
+// In-Order
+// Pós-Order
+
+// === Pré-ordem ===
+//      -> Visita a raiz
+//      -> Percorre a subárvore esquerda
+//      -> Percorre a subárvore direita
+
+void showPreOrder (Tree *root)
+{
+    if (root==NULL) return;
+    printf("%d ",root->value);
+    showPreOrder(root->left);
+    showPreOrder(root->right);
+}
+
+// === In-ordem ===
+//      ->Percorre a subárvore esquerda
+//      ->Visita a raiz
+//      ->Percorre a subárvore direita
+
+void showPreOrder (Tree *root){
+    if (root==NULL) return;
+    showPreOrder(root->left);
+    printf("%d ",root->value);
+    showPreOrder(root->right);
+}
+
+// === Pós-ordem ===
+//      ->Percorre a subárvore esquerda
+//      ->Percorre a subárvore direita
+//      ->Visita a raiz
+
+void showPreOrder (Tree *root){
+    if (root==NULL) return;
+    showPreOrder(root->left);
+    showPreOrder(root->right);
+    printf("%d ",root->value);
+}
