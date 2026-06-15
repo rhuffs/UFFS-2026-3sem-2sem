@@ -75,8 +75,6 @@ module Contador_entrada (
     assign fim_entrada = (counter == Nivel);
 endmodule
 
-
-
 module Comparar (
     input [1:0] simbolo_esperando,
     input [1:0] simbolo_jogado,
