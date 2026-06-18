@@ -42,6 +42,25 @@ int left(i){return 2 * i+1;}
 //retorna o irmão a direita
 int right(i){return 2* i+1;}
 
-int insertion(int ent, int size){
+void swap(int *a, int *b){
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
 
+void insertion(int ent, Heap *H){
+    int pai;
+    H->heap[H->size] = ent;
+    int i = H->size;
+    H->size ++;
+    if(i == 0) return;
+    else{
+        while(i>0){
+            pai = (i-1)/2;
+            if(H->heap[i] > H->heap[pai]){
+                swap(&H->heap[i], &H->heap[pai]);
+                i = pai;
+            } else break;
+        }
+    }
 }
