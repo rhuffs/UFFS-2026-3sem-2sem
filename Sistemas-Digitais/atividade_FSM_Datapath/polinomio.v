@@ -343,12 +343,36 @@ module top_polinomio (
     wire [9:0] va_out, vb_out, s_out;
     wire       ula_z, ula_c;
 
-    wire clk_fsm   = ~KEY[0]; 
-    wire rst_fsm   = ~KEY[3];
-    wire start_fsm = ~KEY[1];
+    reg        key0_r1, key0_r2;
+    reg        key1_r1, key1_r2;
+    wire       rst_fsm = ~KEY[3];
+
+    always @(posedge CLOCK_50 or posedge rst_fsm) begin
+        if (rst_fsm) begin
+            key0_r1 <= 1'b0; key0_r2 <= 1'b0;
+            key1_r1 <= 1'b0; key1_r2 <= 1'b0;
+        end else begin
+            key0_r1 <= ~KEY[0]; key0_r2 <= key0_r1;
+            key1_r1 <= ~KEY[1]; key1_r2 <= key1_r1;
+        end
+    end
+
+    wire clk_fsm   = (key0_r1 && !key0_r2);
+    wire start_fsm = (key1_r1 && !key1_r2);
+
+    reg clk_pulso;
+    always @(*) begin
+        if (estado_atual == S0_IDLE)
+            clk_pulso = CLOCK_50;
+        else
+            clk_pulso = clk_fsm;
+    end
+
+    parameter S0_IDLE = 4'd0;
+    wire [3:0] estado_atual = fsm_inst.estado_atual;
 
     fsm_polinomio fsm_inst (
-        .clk          (clk_fsm),
+        .clk          (clk_pulso),
         .reset        (rst_fsm),
         .inicio       (start_fsm),
         .z            (ula_z),
@@ -363,7 +387,7 @@ module top_polinomio (
     );
 
     datapath dp_inst (
-        .clk       (clk_fsm),
+        .clk       (clk_pulso),
         .escreve   (escreve),
         .sel_ra    (sel_ra),
         .sel_rb    (sel_rb),
@@ -380,10 +404,12 @@ module top_polinomio (
 
     assign LEDR[9:1] = 9'b000000000;
 
-    wire [3:0] digito_milhar  = va_out / 1000;
-    wire [3:0] digito_centena = (va_out % 1000) / 100;
-    wire [3:0] digito_dezena  = (va_out % 100) / 10;
-    wire [3:0] digito_unidade = va_out % 10;
+    wire [9:0] valor_exibido = (estado_atual == S0_IDLE) ? SW : va_out;
+
+    wire [3:0] digito_milhar  = valor_exibido / 1000;
+    wire [3:0] digito_centena = (valor_exibido % 1000) / 100;
+    wire [3:0] digito_dezena  = (valor_exibido % 100) / 10;
+    wire [3:0] digito_unidade = valor_exibido % 10;
 
     function [6:0] bcd_to_7seg;
         input [3:0] bcd;
