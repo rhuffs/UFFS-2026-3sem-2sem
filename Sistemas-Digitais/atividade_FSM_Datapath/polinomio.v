@@ -194,10 +194,12 @@ module ula (
 
 endmodule
 
+
 module fsm_polinomio (
     input  wire        clk,
     input  wire        reset,
     input  wire        inicio,
+    input  wire        avanca,
     input  wire        z,
     input  wire        c,
     output reg         escreve,
@@ -209,15 +211,16 @@ module fsm_polinomio (
     output reg         overflow_led
 );
 
-    parameter S0_IDLE     = 4'd0,
-              S1_CALC_D1  = 4'd1,
-              S2_CALC_D2  = 4'd2,
-              S3_RST_CNT  = 4'd3,
-              S4_VERIFICA = 4'd4,
-              S5_PROX_P   = 4'd5,
-              S6_PROX_D1  = 4'd6,
-              S7_INC_CNT  = 4'd7,
-              S8_FIM      = 4'd8;
+    parameter S0_IDLE        = 4'd0,
+              S1_CALC_2A     = 4'd1,
+              S2_CALC_DP     = 4'd2,
+              S3_RST_CNT     = 4'd3,
+              S4_VERIFICA    = 4'd4,
+              S5_MOSTRA      = 4'd5,
+              S6_PROX_P      = 4'd6,
+              S7_PROX_D1     = 4'd7,
+              S8_INC_CNT     = 4'd8,
+              S9_FIM         = 4'd9;
 
     reg [3:0] estado_atual, proximo_estado;
 
@@ -227,7 +230,7 @@ module fsm_polinomio (
             overflow_led <= 1'b0;
         end else begin
             estado_atual <= proximo_estado;
-            if ((estado_atual == S5_PROX_P || estado_atual == S6_PROX_D1) && c) begin
+            if ((estado_atual == S6_PROX_P || estado_atual == S7_PROX_D1) && c) begin
                 overflow_led <= 1'b1;
             end
         end
@@ -238,33 +241,30 @@ module fsm_polinomio (
         sel_ra    = 3'd0;
         sel_rb    = 3'd0;
         sel_rw    = 3'd0;
-        sel_op    = 3'b000;
+        sel_op    = 3'b011;
         mux_w_sel = 1'b0;
         proximo_estado = estado_atual;
 
         case (estado_atual)
             S0_IDLE: begin
-                escreve = 1'b1;
-                sel_rw  = 3'd6;
                 mux_w_sel = 1'b1;
-                if (inicio)
-                    proximo_estado = S1_CALC_D1;
+                if (inicio) proximo_estado = S1_CALC_2A;
             end
 
-            S1_CALC_D1: begin
+            S1_CALC_2A: begin
                 escreve = 1'b1;
-                sel_ra  = 3'd0;
-                sel_rb  = 3'd1;
-                sel_rw  = 3'd3;
+                sel_ra  = 3'd3; 
+                sel_rb  = 3'd3;
+                sel_rw  = 3'd2;
                 sel_op  = 3'b011;
-                proximo_estado = S2_CALC_D2;
+                proximo_estado = S2_CALC_DP;
             end
 
-            S2_CALC_D2: begin
+            S2_CALC_DP: begin
                 escreve = 1'b1;
-                sel_ra  = 3'd0;
-                sel_rb  = 3'd0;
-                sel_rw  = 3'd4;
+                sel_ra  = 3'd3;
+                sel_rb  = 3'd4;
+                sel_rw  = 3'd1;
                 sel_op  = 3'b011;
                 proximo_estado = S3_RST_CNT;
             end
@@ -274,39 +274,42 @@ module fsm_polinomio (
                 sel_ra  = 3'd0;
                 sel_rb  = 3'd0;
                 sel_rw  = 3'd5;
-                sel_op  = 3'b111;
+                sel_op  = 3'b110;
                 proximo_estado = S4_VERIFICA;
             end
 
             S4_VERIFICA: begin
-                escreve = 1'b0;
-                sel_ra  = 3'd6;
-                sel_rb  = 3'd5;
-                sel_op  = 3'b110;
-                sel_ra  = (z) ? 3'd2 : 3'd6; 
-                if (z) proximo_estado = S8_FIM;
-                else   proximo_estado = S5_PROX_P;
+                sel_ra = 3'd6;
+                sel_rb = 3'd5;
+                sel_op = 3'b110;
+                if (z) proximo_estado = S9_FIM;
+                else   proximo_estado = S5_MOSTRA;
             end
 
-            S5_PROX_P: begin
+            S5_MOSTRA: begin
+                sel_ra = 3'd0;
+                proximo_estado = S6_PROX_P;
+            end
+
+            S6_PROX_P: begin
                 escreve = 1'b1;
-                sel_ra  = 3'd2;
-                sel_rb  = 3'd3;
-                sel_rw  = 3'd2;
+                sel_ra  = 3'd0;
+                sel_rb  = 3'd1;
+                sel_rw  = 3'd0;
                 sel_op  = 3'b011;
-                proximo_estado = S6_PROX_D1;
+                proximo_estado = S7_PROX_D1;
             end
 
-            S6_PROX_D1: begin
+            S7_PROX_D1: begin
                 escreve = 1'b1;
-                sel_ra  = 3'd3;
-                sel_rb  = 3'd4;
-                sel_rw  = 3'd3;
+                sel_ra  = 3'd1;
+                sel_rb  = 3'd2;
+                sel_rw  = 3'd1;
                 sel_op  = 3'b011;
-                proximo_estado = S7_INC_CNT;
+                proximo_estado = S8_INC_CNT;
             end
 
-            S7_INC_CNT: begin
+            S8_INC_CNT: begin
                 escreve = 1'b1;
                 sel_ra  = 3'd5;
                 sel_rb  = 3'd7;
@@ -315,18 +318,17 @@ module fsm_polinomio (
                 proximo_estado = S4_VERIFICA;
             end
 
-            S8_FIM: begin
-                escreve = 1'b0;
-                sel_ra  = 3'd2;
-                proximo_estado = S8_FIM;
+            S9_FIM: begin
+                sel_ra = 3'd0;
+                if (!inicio) proximo_estado = S0_IDLE;
             end
-            
+
             default: proximo_estado = S0_IDLE;
         endcase
     end
 endmodule
 
-module top_polinomio (
+module polinomio (
     input  wire        CLOCK_50,
     input  wire [3:0]  KEY,
     input  wire [9:0]  SW,
@@ -337,64 +339,80 @@ module top_polinomio (
     output wire [6:0]  HEX3
 );
 
-    wire       escreve;
-    wire [2:0] sel_ra, sel_rb, sel_rw, sel_op;
-    wire       mux_w_sel;
+    wire        fsm_escreve;
+    wire [2:0] fsm_sel_ra, fsm_sel_rb, fsm_sel_rw, fsm_sel_op;
+    wire        fsm_mux_w_sel;
+
+    wire [2:0] dp_sel_ra, dp_sel_rb, dp_sel_rw, dp_sel_op;
+    wire        dp_escreve, dp_mux_w_sel;
+
     wire [9:0] va_out, vb_out, s_out;
-    wire       ula_z, ula_c;
+    wire        ula_z, ula_c;
 
     reg        key0_r1, key0_r2;
     reg        key1_r1, key1_r2;
+    reg        key2_r1, key2_r2;
     wire       rst_fsm = ~KEY[3];
 
     always @(posedge CLOCK_50 or posedge rst_fsm) begin
         if (rst_fsm) begin
             key0_r1 <= 1'b0; key0_r2 <= 1'b0;
             key1_r1 <= 1'b0; key1_r2 <= 1'b0;
+            key2_r1 <= 1'b0; key2_r2 <= 1'b0;
         end else begin
             key0_r1 <= ~KEY[0]; key0_r2 <= key0_r1;
             key1_r1 <= ~KEY[1]; key1_r2 <= key1_r1;
+            key2_r1 <= ~KEY[2]; key2_r2 <= key2_r1;
         end
     end
 
-    wire clk_fsm   = (key0_r1 && !key0_r2);
-    wire start_fsm = (key1_r1 && !key1_r2);
+    wire clk_fsm      = (key0_r1 && !key0_r2);
+    wire manual_write = (key1_r1 && !key1_r2);
+    wire reg_inc      = (key2_r1 && !key2_r2);
 
-    reg clk_pulso;
-    always @(*) begin
-        if (estado_atual == S0_IDLE)
-            clk_pulso = CLOCK_50;
-        else
-            clk_pulso = clk_fsm;
+    reg [2:0] reg_target;
+    always @(posedge CLOCK_50 or posedge rst_fsm) begin
+        if (rst_fsm) begin
+            reg_target <= 3'd0;
+        end else if (reg_inc && (fsm_mux_w_sel)) begin
+            reg_target <= reg_target + 1'b1;
+        end
     end
 
-    parameter S0_IDLE = 4'd0;
-    wire [3:0] estado_atual = fsm_inst.estado_atual;
+    assign dp_mux_w_sel = SW[9] ? fsm_mux_w_sel : 1'b1;
+    assign dp_escreve   = SW[9] ? fsm_escreve   : manual_write;
+    assign dp_sel_rw    = SW[9] ? fsm_sel_rw    : reg_target;
+    assign dp_sel_ra    = SW[9] ? fsm_sel_ra    : reg_target;
+    assign dp_sel_rb    = fsm_sel_rb;
+    assign dp_sel_op    = fsm_sel_op;
+
+    assign LEDR[3:1] = reg_target;
 
     fsm_polinomio fsm_inst (
-        .clk          (clk_pulso),
+        .clk          (clk_fsm),  
         .reset        (rst_fsm),
-        .inicio       (start_fsm),
+        .inicio       (SW[9]),
+        .avanca       (1'b0),
         .z            (ula_z),
         .c            (ula_c),
-        .escreve      (escreve),
-        .sel_ra       (sel_ra),
-        .sel_rb       (sel_rb),
-        .sel_rw       (sel_rw),
-        .sel_op       (sel_op),
-        .mux_w_sel    (mux_w_sel),
+        .escreve      (fsm_escreve),
+        .sel_ra       (fsm_sel_ra),
+        .sel_rb       (fsm_sel_rb),
+        .sel_rw       (fsm_sel_rw),
+        .sel_op       (fsm_sel_op),
+        .mux_w_sel    (fsm_mux_w_sel),
         .overflow_led (LEDR[0])
     );
 
     datapath dp_inst (
-        .clk       (clk_pulso),
-        .escreve   (escreve),
-        .sel_ra    (sel_ra),
-        .sel_rb    (sel_rb),
-        .sel_rw    (sel_rw),
-        .sel_op    (sel_op),
-        .mux_w_sel (mux_w_sel),
-        .ext_w     (SW),
+        .clk       (CLOCK_50),
+        .escreve   (dp_escreve),
+        .sel_ra    (dp_sel_ra),
+        .sel_rb    (dp_sel_rb),
+        .sel_rw    (dp_sel_rw),
+        .sel_op    (dp_sel_op),
+        .mux_w_sel (dp_mux_w_sel),
+        .ext_w     ({2'b00, SW[7:0]}),
         .va        (va_out),
         .vb        (vb_out),
         .s         (s_out),
@@ -402,9 +420,9 @@ module top_polinomio (
         .c         (ula_c)
     );
 
-    assign LEDR[9:1] = 9'b000000000;
+    assign LEDR[9:4] = 6'b000000;
 
-    wire [9:0] valor_exibido = (estado_atual == S0_IDLE) ? SW : va_out;
+    wire [9:0] valor_exibido = va_out;
 
     wire [3:0] digito_milhar  = valor_exibido / 1000;
     wire [3:0] digito_centena = (valor_exibido % 1000) / 100;
