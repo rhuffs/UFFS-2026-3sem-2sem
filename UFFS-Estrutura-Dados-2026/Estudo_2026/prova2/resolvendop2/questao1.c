@@ -16,41 +16,29 @@ struct tsentsim {
 typedef struct tsentsim tsentsim;
 
 
-// ------- lista dupla -------
-
-struct tdup {
-    float info;
-    struct tdup *next;
-    struct tdup *prev;
-};
-typedef struct tdup tdup;
-
-struct tsentdup {
-    tdup *first;
-    tdup *last;
-};
-typedef struct tsentdup tsentdup;
 
 
+tsentsim *getList (int *v, int tam){
+    tsentsim *sentinelas = (tsentsim* )malloc(sizeof(tsentsim));
+    sentinelas->first= NULL;
+    sentinelas->last = NULL;
 
-tsentsim* getList(int *v, int tam) {
-    tsentsim *sents = (tsentsim*) malloc(sizeof(tsentsim));
-    sents->first = NULL;
-    sents->last  = NULL;
-
-    for (int i = 0; i < tam; i++) {
+    for(int i = 0; i < tam; i++){
         tsimp *novo = (tsimp*) malloc(sizeof(tsimp));
         novo->info = v[i];
         novo->next = NULL;
 
-        if (sents->first == NULL) {
-            sents->first = novo;
-            sents->last  = novo;
+
+        if (sentinelas->first == NULL){
+            sentinelas->first = novo;
+            sentinelas->last = novo;
         } else {
-            sents->last->next = novo;  // liga o último ao novo
-            sents->last = novo;        // atualiza o last
+            sentinelas->last->next = novo; // o proximo do ultimo recebe o nó
+            sentinelas->last = novo; // e o last aponta pro ultimo
         }
     }
 
-    return sents;
+    return sentinelas;
 }
+
+
