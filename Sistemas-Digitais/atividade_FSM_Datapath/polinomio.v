@@ -392,7 +392,7 @@ module polinomio (
         .clk          (clk_fsm),  
         .reset        (rst_fsm),
         .inicio       (SW[9]),
-        .avanca       (1'b0),
+        .avanca       (1'b1),
         .z            (ula_z),
         .c            (ula_c),
         .escreve      (fsm_escreve),
