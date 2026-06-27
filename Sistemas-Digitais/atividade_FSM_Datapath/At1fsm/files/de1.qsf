@@ -1,33 +1,28 @@
-# ============================================================
+# =============================================================
 #  Constraints — Altera DE1 (Cyclone II EP2C20F484C7)
 #  Pinos extraídos de DE1_pin_assignments.csv
-#  Quartus 13.0 ou superior
-# ============================================================
+# =============================================================
 
 set_global_assignment -name FAMILY "Cyclone II"
 set_global_assignment -name DEVICE EP2C20F484C7
 set_global_assignment -name TOP_LEVEL_ENTITY top_mult
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION "13.0"
 
-# ---- Arquivos fonte ----
+# Arquivos fonte
 set_global_assignment -name VERILOG_FILE debounce.v
 set_global_assignment -name VERILOG_FILE register_file.v
 set_global_assignment -name VERILOG_FILE ula.v
 set_global_assignment -name VERILOG_FILE datapath.v
 set_global_assignment -name VERILOG_FILE fsm_mult.v
-set_global_assignment -name VERILOG_FILE bin2bcd_20.v
+set_global_assignment -name VERILOG_FILE bin2bcd.v
 set_global_assignment -name VERILOG_FILE bcd_7seg.v
 set_global_assignment -name VERILOG_FILE top_mult.v
 
-# ============================================================
-#  CLOCK
-# ============================================================
+# CLOCK
 set_location_assignment PIN_L1 -to CLOCK_50
 set_instance_assignment -name IO_STANDARD LVTTL -to CLOCK_50
 
-# ============================================================
-#  KEY (push-buttons, ativo-baixo)
-# ============================================================
+# KEY
 set_location_assignment PIN_R22 -to KEY[0]
 set_location_assignment PIN_R21 -to KEY[1]
 set_location_assignment PIN_T22 -to KEY[2]
@@ -37,9 +32,7 @@ set_instance_assignment -name IO_STANDARD LVTTL -to KEY[1]
 set_instance_assignment -name IO_STANDARD LVTTL -to KEY[2]
 set_instance_assignment -name IO_STANDARD LVTTL -to KEY[3]
 
-# ============================================================
-#  SW (10 switches)
-# ============================================================
+# SW
 set_location_assignment PIN_L22 -to SW[0]
 set_location_assignment PIN_L21 -to SW[1]
 set_location_assignment PIN_M22 -to SW[2]
@@ -61,9 +54,7 @@ set_instance_assignment -name IO_STANDARD LVTTL -to SW[7]
 set_instance_assignment -name IO_STANDARD LVTTL -to SW[8]
 set_instance_assignment -name IO_STANDARD LVTTL -to SW[9]
 
-# ============================================================
-#  LEDR (10 LEDs vermelhos)
-# ============================================================
+# LEDR
 set_location_assignment PIN_R20 -to LEDR[0]
 set_location_assignment PIN_R19 -to LEDR[1]
 set_location_assignment PIN_U19 -to LEDR[2]
@@ -85,9 +76,7 @@ set_instance_assignment -name IO_STANDARD LVTTL -to LEDR[7]
 set_instance_assignment -name IO_STANDARD LVTTL -to LEDR[8]
 set_instance_assignment -name IO_STANDARD LVTTL -to LEDR[9]
 
-# ============================================================
-#  LEDG (8 LEDs verdes)
-# ============================================================
+# LEDG
 set_location_assignment PIN_U22 -to LEDG[0]
 set_location_assignment PIN_U21 -to LEDG[1]
 set_location_assignment PIN_V22 -to LEDG[2]
@@ -105,9 +94,7 @@ set_instance_assignment -name IO_STANDARD LVTTL -to LEDG[5]
 set_instance_assignment -name IO_STANDARD LVTTL -to LEDG[6]
 set_instance_assignment -name IO_STANDARD LVTTL -to LEDG[7]
 
-# ============================================================
-#  HEX0
-# ============================================================
+# HEX0
 set_location_assignment PIN_J2 -to HEX0[0]
 set_location_assignment PIN_J1 -to HEX0[1]
 set_location_assignment PIN_H2 -to HEX0[2]
@@ -123,9 +110,7 @@ set_instance_assignment -name IO_STANDARD LVTTL -to HEX0[4]
 set_instance_assignment -name IO_STANDARD LVTTL -to HEX0[5]
 set_instance_assignment -name IO_STANDARD LVTTL -to HEX0[6]
 
-# ============================================================
-#  HEX1
-# ============================================================
+# HEX1
 set_location_assignment PIN_E1 -to HEX1[0]
 set_location_assignment PIN_H6 -to HEX1[1]
 set_location_assignment PIN_H5 -to HEX1[2]
@@ -141,9 +126,7 @@ set_instance_assignment -name IO_STANDARD LVTTL -to HEX1[4]
 set_instance_assignment -name IO_STANDARD LVTTL -to HEX1[5]
 set_instance_assignment -name IO_STANDARD LVTTL -to HEX1[6]
 
-# ============================================================
-#  HEX2
-# ============================================================
+# HEX2
 set_location_assignment PIN_G5 -to HEX2[0]
 set_location_assignment PIN_G6 -to HEX2[1]
 set_location_assignment PIN_C2 -to HEX2[2]
@@ -159,9 +142,7 @@ set_instance_assignment -name IO_STANDARD LVTTL -to HEX2[4]
 set_instance_assignment -name IO_STANDARD LVTTL -to HEX2[5]
 set_instance_assignment -name IO_STANDARD LVTTL -to HEX2[6]
 
-# ============================================================
-#  HEX3
-# ============================================================
+# HEX3
 set_location_assignment PIN_F4 -to HEX3[0]
 set_location_assignment PIN_D5 -to HEX3[1]
 set_location_assignment PIN_D6 -to HEX3[2]
