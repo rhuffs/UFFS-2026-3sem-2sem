@@ -202,6 +202,7 @@ module fsm_polinomio (
     input  wire        avanca,
     input  wire        z,
     input  wire        c,
+
     output reg         escreve,
     output reg  [2:0]  sel_ra,
     output reg  [2:0]  sel_rb,
@@ -211,148 +212,200 @@ module fsm_polinomio (
     output reg         overflow_led
 );
 
-    parameter S0_IDLE        = 4'd0,
-              S1_CALC_2A     = 4'd1,
-              S2_CALC_DP     = 4'd2,
-              S3_RST_CNT     = 4'd3,
-              S4_VERIFICA    = 4'd4,
-              S5_MOSTRA      = 4'd5,
-              S6_PROX_P      = 4'd6,
-              S7_PROX_D1     = 4'd7,
-              S8_INC_CNT     = 4'd8,
-              S9_FIM         = 4'd9;
+    localparam S0_IDLE      = 4'd0;
+    localparam S1_CALC_2A   = 4'd1;
+    localparam S3_RST_CNT   = 4'd3;
+    localparam S4_VERIFICA  = 4'd4;
+    localparam S5_MOSTRA    = 4'd5;
+    localparam S6_PROX_P    = 4'd6;
+    localparam S7_PROX_D1   = 4'd7;
+    localparam S8_INC_CNT   = 4'd8;
+    localparam S9_FIM       = 4'd9;
 
-    reg [3:0] estado_atual, proximo_estado;
+    reg [3:0] estado_atual;
+    reg [3:0] proximo_estado;
+
+    //---------------------------------------------------
+    // Registrador de estado
+    //---------------------------------------------------
 
     always @(posedge clk or posedge reset) begin
-        if (reset) begin
+        if(reset) begin
             estado_atual <= S0_IDLE;
             overflow_led <= 1'b0;
-        end else begin
+        end
+        else begin
             estado_atual <= proximo_estado;
-            if ((estado_atual == S6_PROX_P || estado_atual == S7_PROX_D1) && c) begin
+            
+            // Sinaliza overflow apenas durante operações de soma
+            if((estado_atual == S6_PROX_P || estado_atual == S7_PROX_D1) && c)
                 overflow_led <= 1'b1;
-            end
+            else
+                overflow_led <= 1'b0;
         end
     end
 
+    //---------------------------------------------------
+    // Lógica combinacional
+    //---------------------------------------------------
+
     always @(*) begin
-        escreve   = 1'b0;
-        sel_ra    = 3'd0;
-        sel_rb    = 3'd0;
-        sel_rw    = 3'd0;
-        sel_op    = 3'b011;
-        mux_w_sel = 1'b0;
+        // Valores padrão
+        escreve        = 1'b0;
+        sel_ra         = 3'd0;
+        sel_rb         = 3'd0;
+        sel_rw         = 3'd0;
+        sel_op         = 3'b011;  // soma por padrão
+        mux_w_sel      = 1'b0;
         proximo_estado = estado_atual;
 
-        case (estado_atual)
+        case(estado_atual)
+            //------------------------------------------------
+            // Espera início
+            //------------------------------------------------
             S0_IDLE: begin
-                mux_w_sel = 1'b1;
-                if (inicio) proximo_estado = S1_CALC_2A;
+                mux_w_sel = 1'b1;  // permite escrita externa
+                if(inicio)
+                    proximo_estado = S1_CALC_2A;
             end
 
+            //------------------------------------------------
+            // D2 = 2A (segunda diferença)
+            //------------------------------------------------
             S1_CALC_2A: begin
                 escreve = 1'b1;
-                sel_ra  = 3'd3; 
-                sel_rb  = 3'd3;
-                sel_rw  = 3'd2;
-                sel_op  = 3'b011;
-                proximo_estado = S2_CALC_DP;
+                sel_ra  = 3'd3;    // registrador A (coeficiente a)
+                sel_rb  = 3'd3;    // registrador A (coeficiente a)
+                sel_rw  = 3'd2;    // registrador D2
+                sel_op  = 3'b011;  // soma (a + a = 2a)
+                
+                proximo_estado = S3_RST_CNT;  // vai direto para zerar contador
             end
 
-            S2_CALC_DP: begin
-                escreve = 1'b1;
-                sel_ra  = 3'd3;
-                sel_rb  = 3'd4;
-                sel_rw  = 3'd1;
-                sel_op  = 3'b011;
-                proximo_estado = S3_RST_CNT;
-            end
-
+            //------------------------------------------------
+            // contador = 0
+            //------------------------------------------------
             S3_RST_CNT: begin
                 escreve = 1'b1;
-                sel_ra  = 3'd0;
-                sel_rb  = 3'd0;
-                sel_rw  = 3'd5;
-                sel_op  = 3'b110;
+                sel_ra  = 3'd0;    // zero
+                sel_rb  = 3'd0;    // zero
+                sel_rw  = 3'd5;    // registrador contador
+                sel_op  = 3'b110;  // subtração (0 - 0 = 0)
+                
                 proximo_estado = S4_VERIFICA;
             end
 
+            //------------------------------------------------
+            // contador == N ?
+            //------------------------------------------------
             S4_VERIFICA: begin
-                sel_ra = 3'd6;
-                sel_rb = 3'd5;
-                sel_op = 3'b110;
-                if (z) proximo_estado = S9_FIM;
-                else   proximo_estado = S5_MOSTRA;
+                sel_ra = 3'd6;     // N (quantidade de valores)
+                sel_rb = 3'd5;     // contador
+                sel_op = 3'b110;   // subtração (N - contador)
+                
+                if(z)               // se N == contador
+                    proximo_estado = S9_FIM;
+                else
+                    proximo_estado = S5_MOSTRA;
             end
 
+            //------------------------------------------------
+            // Mostra valor atual
+            //------------------------------------------------
             S5_MOSTRA: begin
-                sel_ra = 3'd0;
-                proximo_estado = S6_PROX_P;
+                sel_ra = 3'd0;     // P (valor do polinômio)
+                
+                if(avanca)          // aguarda pressionar botão
+                    proximo_estado = S6_PROX_P;
+                else
+                    proximo_estado = S5_MOSTRA;
             end
 
+            //------------------------------------------------
+            // P = P + D1 (próximo valor do polinômio)
+            //------------------------------------------------
             S6_PROX_P: begin
                 escreve = 1'b1;
-                sel_ra  = 3'd0;
-                sel_rb  = 3'd1;
-                sel_rw  = 3'd0;
-                sel_op  = 3'b011;
+                sel_ra  = 3'd0;    // P
+                sel_rb  = 3'd1;    // D1
+                sel_rw  = 3'd0;    // P
+                sel_op  = 3'b011;  // soma
+                
                 proximo_estado = S7_PROX_D1;
             end
 
+            //------------------------------------------------
+            // D1 = D1 + D2 (atualiza diferença)
+            //------------------------------------------------
             S7_PROX_D1: begin
                 escreve = 1'b1;
-                sel_ra  = 3'd1;
-                sel_rb  = 3'd2;
-                sel_rw  = 3'd1;
-                sel_op  = 3'b011;
+                sel_ra  = 3'd1;    // D1
+                sel_rb  = 3'd2;    // D2
+                sel_rw  = 3'd1;    // D1
+                sel_op  = 3'b011;  // soma
+                
                 proximo_estado = S8_INC_CNT;
             end
 
+            //------------------------------------------------
+            // contador++
+            //------------------------------------------------
             S8_INC_CNT: begin
                 escreve = 1'b1;
-                sel_ra  = 3'd5;
-                sel_rb  = 3'd7;
-                sel_rw  = 3'd5;
-                sel_op  = 3'b011;
+                sel_ra  = 3'd5;    // contador
+                sel_rb  = 3'd7;    // constante 1
+                sel_rw  = 3'd5;    // contador
+                sel_op  = 3'b011;  // soma
+                
                 proximo_estado = S4_VERIFICA;
             end
 
+            //------------------------------------------------
+            // Fim
+            //------------------------------------------------
             S9_FIM: begin
-                sel_ra = 3'd0;
-                if (!inicio) proximo_estado = S0_IDLE;
+                sel_ra = 3'd0;     // exibe último valor
+                
+                if(!inicio)         // volta ao idle quando inicio for desativado
+                    proximo_estado = S0_IDLE;
+                else
+                    proximo_estado = S9_FIM;
             end
 
-            default: proximo_estado = S0_IDLE;
+            default: begin
+                proximo_estado = S0_IDLE;
+            end
         endcase
     end
 endmodule
 
 module polinomio (
-    input  wire        CLOCK_50,
-    input  wire [3:0]  KEY,
-    input  wire [9:0]  SW,
-    output wire [9:0]  LEDR,
-    output wire [6:0]  HEX0,
-    output wire [6:0]  HEX1,
-    output wire [6:0]  HEX2,
-    output wire [6:0]  HEX3
+    input  wire CLOCK_50,
+    input  wire [3:0] KEY,
+    input  wire [9:0] SW,
+    output wire [9:0] LEDR,
+    output wire [6:0] HEX0,
+    output wire [6:0] HEX1,
+    output wire [6:0] HEX2,
+    output wire [6:0] HEX3
 );
 
-    wire        fsm_escreve;
+    // Sinais internos
+    wire fsm_escreve;
     wire [2:0] fsm_sel_ra, fsm_sel_rb, fsm_sel_rw, fsm_sel_op;
-    wire        fsm_mux_w_sel;
+    wire fsm_mux_w_sel;
 
     wire [2:0] dp_sel_ra, dp_sel_rb, dp_sel_rw, dp_sel_op;
-    wire        dp_escreve, dp_mux_w_sel;
+    wire dp_escreve, dp_mux_w_sel;
 
-    wire [9:0] va_out, vb_out, s_out;
-    wire        ula_z, ula_c;
+    wire [9:0]va_out, vb_out, s_out;
+    wire ula_z, ula_c;
 
-    reg        key0_r1, key0_r2;
-    reg        key1_r1, key1_r2;
-    reg        key2_r1, key2_r2;
-    wire       rst_fsm = ~KEY[3];
+    // Debounce para os botões
+    reg key0_r1, key0_r2;
+    reg key1_r1, key1_r2;
+    reg key2_r1, key2_r2;
+    wire rst_fsm = ~KEY[3];
 
     always @(posedge CLOCK_50 or posedge rst_fsm) begin
         if (rst_fsm) begin
@@ -360,73 +413,88 @@ module polinomio (
             key1_r1 <= 1'b0; key1_r2 <= 1'b0;
             key2_r1 <= 1'b0; key2_r2 <= 1'b0;
         end else begin
-            key0_r1 <= ~KEY[0]; key0_r2 <= key0_r1;
-            key1_r1 <= ~KEY[1]; key1_r2 <= key1_r1;
-            key2_r1 <= ~KEY[2]; key2_r2 <= key2_r1;
+            key0_r1 <= ~KEY[0]; 
+            key0_r2 <= key0_r1;
+            key1_r1 <= ~KEY[1]; 
+            key1_r2 <= key1_r1;
+            key2_r1 <= ~KEY[2]; 
+            key2_r2 <= key2_r1;
         end
     end
 
-    wire clk_fsm      = (key0_r1 && !key0_r2);
-    wire manual_write = (key1_r1 && !key1_r2);
-    wire reg_inc      = (key2_r1 && !key2_r2);
+    // Pulsos dos botões
+    wire clk_fsm  = (key0_r1 && !key0_r2); // KEY[0] = clock da FSM
+    wire manual_write = (key1_r1 && !key1_r2);// KEY[1] = escrita manual
+    wire reg_inc = (key2_r1 && !key2_r2);// KEY[2] = incrementa registrador
+    wire avanca_pulse = (key2_r1 && !key2_r2);// KEY[2] = avança no modo FSM
 
+    // Seleção do registrador alvo para carga manual
     reg [2:0] reg_target;
     always @(posedge CLOCK_50 or posedge rst_fsm) begin
         if (rst_fsm) begin
             reg_target <= 3'd0;
-        end else if (reg_inc && (fsm_mux_w_sel)) begin
+        end else if (reg_inc && dp_mux_w_sel) begin  // só incrementa no modo manual
             reg_target <= reg_target + 1'b1;
         end
     end
 
+    // Configuração do modo de operação
+    // SW[9] = 0 -> modo manual (carga de registradores)
+    // SW[9] = 1 -> modo FSM (execução automática)
     assign dp_mux_w_sel = SW[9] ? fsm_mux_w_sel : 1'b1;
-    assign dp_escreve   = SW[9] ? fsm_escreve   : manual_write;
-    assign dp_sel_rw    = SW[9] ? fsm_sel_rw    : reg_target;
-    assign dp_sel_ra    = SW[9] ? fsm_sel_ra    : reg_target;
-    assign dp_sel_rb    = fsm_sel_rb;
-    assign dp_sel_op    = fsm_sel_op;
+    assign dp_escreve= SW[9] ? fsm_escreve : manual_write;
+    assign dp_sel_rw = SW[9] ? fsm_sel_rw : reg_target;
+    assign dp_sel_ra = SW[9] ? fsm_sel_ra: reg_target;
+    assign dp_sel_rb= fsm_sel_rb;
+    assign dp_sel_op = fsm_sel_op;
 
+    // LED indicador do registrador alvo (modo manual)
     assign LEDR[3:1] = reg_target;
 
+    // Instância da FSM
     fsm_polinomio fsm_inst (
-        .clk          (clk_fsm),  
-        .reset        (rst_fsm),
-        .inicio       (SW[9]),
-        .avanca       (1'b1),
-        .z            (ula_z),
-        .c            (ula_c),
-        .escreve      (fsm_escreve),
-        .sel_ra       (fsm_sel_ra),
-        .sel_rb       (fsm_sel_rb),
-        .sel_rw       (fsm_sel_rw),
-        .sel_op       (fsm_sel_op),
-        .mux_w_sel    (fsm_mux_w_sel),
+        .clk(clk_fsm),  
+        .reset(rst_fsm),
+        .inicio(SW[9]),          // SW[9] = início/execução
+        .avanca(SW[9] ? avanca_pulse : 1'b0),  // KEY[2] avança no modo FSM
+        .z(ula_z),
+        .c(ula_c),
+        .escreve(fsm_escreve),
+        .sel_ra(fsm_sel_ra),
+        .sel_rb(fsm_sel_rb),
+        .sel_rw(fsm_sel_rw),
+        .sel_op(fsm_sel_op),
+        .mux_w_sel(fsm_mux_w_sel),
         .overflow_led (LEDR[0])
     );
 
+    // Instância do datapath
     datapath dp_inst (
-        .clk       (CLOCK_50),
-        .escreve   (dp_escreve),
-        .sel_ra    (dp_sel_ra),
-        .sel_rb    (dp_sel_rb),
-        .sel_rw    (dp_sel_rw),
-        .sel_op    (dp_sel_op),
-        .mux_w_sel (dp_mux_w_sel),
-        .ext_w     ({2'b00, SW[7:0]}),
-        .va        (va_out),
-        .vb        (vb_out),
-        .s         (s_out),
-        .z         (ula_z),
-        .c         (ula_c)
+        .clk(CLOCK_50),
+        .escreve(dp_escreve),
+        .sel_ra(dp_sel_ra),
+        .sel_rb(dp_sel_rb),
+        .sel_rw(dp_sel_rw),
+        .sel_op(dp_sel_op),
+        .mux_w_sel(dp_mux_w_sel),
+        .ext_w({1'b0, SW[8:0]}),   // SW[8:0] = valor a carregar (9 bits)
+        .va(va_out),
+        .vb(vb_out),
+        .s(s_out),
+        .z(ula_z),
+        .c(ula_c)
     );
 
+    // LEDs não utilizados
     assign LEDR[9:4] = 6'b000000;
 
+    // Valor a ser exibido (saída do registrador A)
     wire [9:0] valor_exibido = va_out;
 
-    wire [3:0] digito_milhar  = valor_exibido / 1000;
+    // Decodificação BCD para 7 segmentos
+    wire [3:0] digito_milhar= valor_exibido / 1000;
     wire [3:0] digito_centena = (valor_exibido % 1000) / 100;
-    wire [3:0] digito_dezena  = (valor_exibido % 100) / 10;
+    wire [3:0] digito_dezena= (valor_exibido % 100) / 10;
     wire [3:0] digito_unidade = valor_exibido % 10;
 
     function [6:0] bcd_to_7seg;
