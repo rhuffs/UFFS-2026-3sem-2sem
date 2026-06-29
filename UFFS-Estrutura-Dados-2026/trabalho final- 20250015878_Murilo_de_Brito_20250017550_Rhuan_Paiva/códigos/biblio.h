@@ -1,5 +1,5 @@
 
-//apenas para o usuário
+//árvore para o usuário
 typedef struct Usuario{
     char email[100];
     char nome[100];
@@ -11,7 +11,7 @@ typedef struct Noparaousuario{
     struct Noparaousuario *direita;
 } NoUser;
 
-//apenas para o livro
+//árvore para o livro
 typedef struct Livro{
     int id;
     char titulo[100];
@@ -27,9 +27,28 @@ typedef struct Noparaolivro{
     struct Noparaolivro *dir;
 } NoBooks;
 
-//allocar o novo livro no espaço de memoria
+//-->allocar o novo livro no espaço de memoria
 NoBooks *NoPlivro(Books *);
 
-//inserir o livro novo na raiz dos livros
+//-->inserir o livro novo na raiz dos livros
 NoBooks *InsertNewBook(NoBooks *, Books *);
 
+//-->Encontr o extremo do livro(mínimo ou máximo)
+NoBooks* ExtremeBook(NoBooks *, int );
+
+//-->Gera o próximo ID automaticamente
+int nextIDbook(NoBooks *);
+
+Books *findBook(NoBooks *, int );
+
+//-->Remove o livro
+NoBooks *removeBook(NoBooks *, int );
+
+//listar os livros
+void ListBooks(NoBooks *);
+
+//listar os livros por autor
+void ListBooksperAuthor(NoBooks *, char *);
+
+//liberar os livros
+void ReleaseBook(NoBooks *);
