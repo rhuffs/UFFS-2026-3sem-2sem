@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "biblio.h"
 
 void menuPrincipal() {
@@ -47,6 +48,45 @@ void menuExclusao(){
     printf("=======================\n");
 }
 
+void consultarEmprestimos() {
+    char email[100];
+    
+    printf("\n--- CONSULTAR EMPRÉSTIMOS ---\n");
+    lerString(email, 100, "Digite o email do usuário: ");
+    
+    printf("\n--- Livros emprestados para %s ---\n", email);
+    
+    if (raizeslivros == NULL) {
+        printf("Nenhum livro cadastrado.\n");
+        return;
+    }
+    
+    // Percorre a árvore de livros (usando pilha)
+    NoBooks *pilha[1000];
+    int topo = -1;
+    NoBooks *atual = raizeslivros;
+    int encontrou = 0;
+    
+    while (atual != NULL || topo >= 0) {
+        while (atual != NULL) {
+            pilha[++topo] = atual;
+            atual = atual->esq;
+        }
+        atual = pilha[topo--];
+        if (atual->Livro->status == 1 && 
+            strcmp(atual->Livro->Emprestadoemail, email) == 0) {
+            printf("ID: %d | Título: %s | Autor: %s\n",
+                   atual->Livro->id, atual->Livro->titulo, atual->Livro->autor);
+            encontrou = 1;
+        }
+        atual = atual->dir;
+    }
+    
+    if (!encontrou) {
+        printf("Este usuário não possui livros emprestados.\n");
+    }
+}
+
 int main() {
 
     int op;
@@ -58,7 +98,7 @@ int main() {
     do {
         menuPrincipal();
         printf("Escolha uma opção: ");
-        scanf("%d", &op);
+        op = lerInteiro("Escolha uma opção: ");
 
         switch (op) {
             case 1:
@@ -66,10 +106,10 @@ int main() {
                 do{
                     menuCadastro();
                     printf("Escolha uma opção: ");
-                    scanf("%d", &opCad);
+                    opCad = lerInteiro("Escolha uma opção: ");
                     switch (opCad){
                     case 1:
-                        printf("1: Livros\n");
+                        cadastrarLivro();
                         break;
 
                     case 2:
@@ -92,10 +132,10 @@ int main() {
                 do{
                     menuConsulta();
                     printf("Escolha uma opção: ");
-                    scanf("%d", &opConsul);
+                    opConsul = lerInteiro("Escolha uma opção: ");
                     switch (opConsul){
                     case 1:
-                        printf("1: Livros\n");
+                        consultarLivro();
                         break;
 
                     case 2:
@@ -122,10 +162,10 @@ int main() {
                 do{
                     menuAtualizacao();
                     printf("Escolha uma opção: ");
-                    scanf("%d", &opAtu);
+                    opAtu = lerInteiro("Escolha uma opção: ");
                     switch (opAtu){
                     case 1:
-                        printf("1: Livros\n");
+                        updatebook(); 
                         break;
 
                     case 2:
@@ -148,10 +188,10 @@ int main() {
                 do{
                     menuExclusao();
                     printf("Escolha uma opção: ");
-                    scanf("%d", &opExcluir);
+                    opExcluir = lerInteiro("Escolha uma opção: ");
                     switch (opExcluir){
                     case 1:
-                        printf("1: Livros\n");
+                        deleteBook();
                         break;
 
                     case 2:
@@ -171,11 +211,11 @@ int main() {
                 break;
 
             case 5:
-                printf("Empréstimo\n");
+                loanBook();
                 break;
 
             case 6:
-                printf("Devolução\n");
+                devolverLivro();
                 break;
 
             case 0:
