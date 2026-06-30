@@ -48,45 +48,6 @@ void menuExclusao(){
     printf("=======================\n");
 }
 
-void consultarEmprestimos() {
-    char email[100];
-    
-    printf("\n--- CONSULTAR EMPRÉSTIMOS ---\n");
-    lerString(email, 100, "Digite o email do usuário: ");
-    
-    printf("\n--- Livros emprestados para %s ---\n", email);
-    
-    if (raizeslivros == NULL) {
-        printf("Nenhum livro cadastrado.\n");
-        return;
-    }
-    
-    // Percorre a árvore de livros (usando pilha)
-    NoBooks *pilha[1000];
-    int topo = -1;
-    NoBooks *atual = raizeslivros;
-    int encontrou = 0;
-    
-    while (atual != NULL || topo >= 0) {
-        while (atual != NULL) {
-            pilha[++topo] = atual;
-            atual = atual->esq;
-        }
-        atual = pilha[topo--];
-        if (atual->Livro->status == 1 && 
-            strcmp(atual->Livro->Emprestadoemail, email) == 0) {
-            printf("ID: %d | Título: %s | Autor: %s\n",
-                   atual->Livro->id, atual->Livro->titulo, atual->Livro->autor);
-            encontrou = 1;
-        }
-        atual = atual->dir;
-    }
-    
-    if (!encontrou) {
-        printf("Este usuário não possui livros emprestados.\n");
-    }
-}
-
 int main() {
 
     int op;

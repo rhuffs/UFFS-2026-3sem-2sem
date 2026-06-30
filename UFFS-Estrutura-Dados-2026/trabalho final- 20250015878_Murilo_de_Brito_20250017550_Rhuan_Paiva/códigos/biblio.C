@@ -251,7 +251,7 @@ void deleteBook(){
     int confirm = lerInteiro("");
     if(confirm == 1) {
         raizeslivros = removeBook(raizeslivros, id); 
-        printf("Arquivo deletado com sucesso");
+        printf("Arquivo deletado com sucesso\n");
     }
     else{
         printf("operação cancelada\n");
@@ -263,7 +263,7 @@ void loanBook(){
     int id = lerInteiro("Digite o ID do livro que queira ser emprestado: ");
     Books *livro = findBook(raizeslivros, id);
     if(livro == NULL) {
-        printf("arquivo não encontrado"); 
+        printf("arquivo não encontrado\n"); 
         return;
     }
     if(livro->status == 1) {
