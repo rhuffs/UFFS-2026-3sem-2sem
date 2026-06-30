@@ -51,14 +51,25 @@ void ReleaseBook(NoBooks *);
 
 //-->limpa o buffer de entrada(ENTER)
 void limparBuffer();
-
+//-->scanf para string
 int lerString(char *, int , char *);
 
+//-->scanf para inteiro
 int lerInteiro(char *);
 
+//-->cadastrar o livro
 void cadastrarLivro();
 
+//_>consultar o livro
 void consultarLivro();
 
+//->>devolver o livro
 void devolverLivro();
+
+//->remover o livro
+void deleteBook();
+//-->emprestaro o livro
+void loanBook();
+
+void updatebook();
 
