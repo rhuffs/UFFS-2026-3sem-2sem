@@ -15,7 +15,32 @@ void menuPrincipal() {
 }
 
 void menuCadastro(){
-    printf("========= Menu ========\n");
+    printf("====== Cadastro =======\n");
+    printf("| 1. Livros            |\n");
+    printf("| 2. Usuários          |\n");
+    printf("| 0. Voltar            |\n");
+    printf("=======================\n");
+}
+
+void menuConsulta(){
+    printf("======= Consulta =======\n");
+    printf("| 1. Livros            |\n");
+    printf("| 2. Usuários          |\n");
+    printf("| 3. Empréstimos       |\n");
+    printf("| 0. Voltar            |\n");
+    printf("=======================\n");
+}
+
+void menuAtualizacao(){
+    printf("======= Atualizar ======\n");
+    printf("| 1. Livros            |\n");
+    printf("| 2. Usuários          |\n");
+    printf("| 0. Voltar            |\n");
+    printf("=======================\n");
+}
+
+void menuExclusao(){
+    printf("======== Excluir =======\n");
     printf("| 1. Livros            |\n");
     printf("| 2. Usuários          |\n");
     printf("| 0. Voltar            |\n");
@@ -26,6 +51,9 @@ int main() {
 
     int op;
     int opCad;
+    int opExcluir;
+    int opAtu;
+    int opConsul;
 
     do {
         menuPrincipal();
@@ -61,15 +89,85 @@ int main() {
                 break;
 
             case 2:
-                printf("Consulta\n");
+                do{
+                    menuConsulta();
+                    printf("Escolha uma opção: ");
+                    scanf("%d", &opConsul);
+                    switch (opConsul){
+                    case 1:
+                        printf("1: Livros\n");
+                        break;
+
+                    case 2:
+                        printf("2: Usuarios\n");
+                        break;
+
+                    case 3:
+                        printf("0: Empréstimos\n");
+                        break;
+
+                    case 0:
+                        printf("0: Voltar\n");
+                        break;
+                    
+                    default:
+                        printf("Opção inválida\n");
+                        break;
+                    }
+
+                }while(opCad !=0);
                 break;
 
             case 3:
-                printf("Atualização\n");
+                do{
+                    menuAtualizacao();
+                    printf("Escolha uma opção: ");
+                    scanf("%d", &opAtu);
+                    switch (opAtu){
+                    case 1:
+                        printf("1: Livros\n");
+                        break;
+
+                    case 2:
+                        printf("2: Usuarios\n");
+                        break;
+
+                    case 0:
+                        printf("0: Voltar\n");
+                        break;
+                    
+                    default:
+                        printf("Opção inválida\n");
+                        break;
+                    }
+
+                }while(opCad !=0);
                 break;
 
             case 4:
-                printf("Exclusão\n");
+                do{
+                    menuExclusao();
+                    printf("Escolha uma opção: ");
+                    scanf("%d", &opExcluir);
+                    switch (opExcluir){
+                    case 1:
+                        printf("1: Livros\n");
+                        break;
+
+                    case 2:
+                        printf("2: Usuarios\n");
+                        break;
+
+                    case 0:
+                        printf("0: Voltar\n");
+                        break;
+                    
+                    default:
+                        printf("Opção inválida\n");
+                        break;
+                    }
+
+                }while(opCad !=0);
                 break;
 
             case 5:
