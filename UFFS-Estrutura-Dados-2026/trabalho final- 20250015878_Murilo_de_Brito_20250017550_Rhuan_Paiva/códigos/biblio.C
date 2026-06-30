@@ -302,15 +302,15 @@ void updatebook(){
         switch(opcao) {
         case 1:
             lerString(livro->titulo, 100, "Novo título: ");
-            printf("✓ Título atualizado com sucesso!\n");
+            printf("\n> Título atualizado com sucesso!\n");
             break;
         case 2:
             lerString(livro->autor, 100, "Novo autor: ");
-            printf("✓ Autor atualizado com sucesso!\n");
+            printf("\n> Autor atualizado com sucesso!\n");
             break;
         case 3:
             livro->ano = lerInteiro("Novo ano: ");
-            printf("✓ Ano atualizado com sucesso!\n");
+            printf("\n> Ano atualizado com sucesso!\n");
             break;
         default:
             printf("Opção inválida!\n");
