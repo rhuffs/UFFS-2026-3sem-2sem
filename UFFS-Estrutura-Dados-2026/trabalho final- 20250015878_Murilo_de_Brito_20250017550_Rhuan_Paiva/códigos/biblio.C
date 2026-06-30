@@ -282,5 +282,37 @@ void loanBook(){
 }
 
 void updatebook(){
-    
+        int id = lerInteiro("Digite o ID do livro que queira ser emprestado: ");
+    Books *livro = findBook(raizeslivros, id);
+    if(livro == NULL) {
+        printf("arquivo não encontrado"); 
+        return;
+    }
+    printf("\n> ATUALIZANDO LIVRO ID %d \n", id);
+    printf("| Título atual: %s |\n", livro->titulo);
+    printf("| Autor atual: %s  |\n", livro->autor);
+    printf("|   Ano atual: %d  |\n", livro->ano);
+
+    printf("\n> O que deseja alterar?\n");
+    printf("| 1. Título |\n");
+    printf("|  2. Autor |\n");
+    printf("|   3. Ano  |\n");
+    int opcao = lerInteiro("Opção: ");
+
+        switch(opcao) {
+        case 1:
+            lerString(livro->titulo, 100, "Novo título: ");
+            printf("✓ Título atualizado com sucesso!\n");
+            break;
+        case 2:
+            lerString(livro->autor, 100, "Novo autor: ");
+            printf("✓ Autor atualizado com sucesso!\n");
+            break;
+        case 3:
+            livro->ano = lerInteiro("Novo ano: ");
+            printf("✓ Ano atualizado com sucesso!\n");
+            break;
+        default:
+            printf("Opção inválida!\n");
+    }
 }
