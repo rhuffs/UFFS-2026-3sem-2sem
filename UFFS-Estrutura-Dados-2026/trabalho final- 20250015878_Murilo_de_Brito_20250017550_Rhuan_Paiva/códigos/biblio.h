@@ -44,11 +44,25 @@ Books *findBook(NoBooks *, int );
 //-->Remove o livro
 NoBooks *removeBook(NoBooks *, int );
 
-//listar os livros
+//-->listar os livros
 void ListBooks(NoBooks *);
 
-//listar os livros por autor
+//-->listar os livros por autor
 void ListBooksperAuthor(NoBooks *, char *);
 
-//liberar os livros
+//-->liberar os livros
 void ReleaseBook(NoBooks *);
+
+//-->limpa o buffer de entrada(ENTER)
+void limparBuffer();
+
+int lerString(char *, int , char *);
+
+int lerInteiro(char *);
+
+void cadastrarLivro();
+
+void consultarLivro();
+
+void devolverLivro();
+

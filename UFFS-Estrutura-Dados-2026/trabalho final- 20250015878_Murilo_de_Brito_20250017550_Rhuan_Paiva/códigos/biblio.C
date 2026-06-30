@@ -104,8 +104,121 @@ NoBooks *removeBook(NoBooks *raiz, int id) {
 }
 
 //listar os livros->in order
-void ListBooks(NoBooks *Rail){
-    if(Rail == NULL) return;
+void ListBooks(NoBooks *RaizL){
+    if(RaizL == NULL) return;
+    ListBooks(RaizL->esq);
+    printf("|ID: %d | título: %s | autor: %s | ano: %d | status : %s", RaizL->Livro->id, RaizL->Livro->titulo, RaizL->Livro->autor, RaizL->Livro->ano, (RaizL->Livro->status == 0 ) ? "Disponível" : "Emprestado");
+    if(RaizL->Livro->status == 1) printf("> Usuário com o livro: %s", RaizL->Livro->Emprestadoemail);
+    ListBooks(RaizL->dir);
+}
 
-    ListBooks(Rail->esq);
+//listar os livros de um autor específico
+void ListBooksperAuthor(NoBooks *Raizl, char *autor){
+    if(Raizl == NULL) return;
+    ListBooks(Raizl->esq);
+    if(strcmp(Raizl->Livro->autor, autor) == 0){//se for igual
+        printf("|ID: %d | título: %s | ano: %d | status : %s", Raizl->Livro->id, Raizl->Livro->titulo, Raizl->Livro->ano, (Raizl->Livro->status == 0 ) ? "Disponível" : "Emprestado");
+    }
+    ListBooksperAuthor(Raizl, autor);
+}
+
+void ReleaseBook(NoBooks *RaizL){
+    if(RaizL == NULL) return;
+    ReleaseBook(RaizL->esq);
+    ReleaseBook(RaizL->dir);
+    free(RaizL->Livro);
+    free(RaizL);
+}
+
+void limparBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {}
+}
+
+// Ler uma string (texto) do usuário de forma segura
+//ela resolve junto com o limparBuffer, o problema do buffer de entrada
+int lerString(char *destino, int tamanho, char *mensagem) {
+    printf("%s", mensagem);
+    if (fgets(destino, tamanho, stdin) != NULL) {
+        int TAM = strlen(destino);
+        if (TAM > 0 && destino[TAM-1] == '\n') {
+            destino[TAM-1] = '\0'; // Remove o [ENTER] do final
+        } else {
+            limparBuffer();
+        }
+        return 1;
+    }
+    return 0;
+}
+
+int lerInteiro(char *mensagem) {
+    char Tempchar[20];
+    int valor;
+    while (1) {
+        printf("%s", mensagem);
+        if (fgets(Tempchar, sizeof(Tempchar), stdin) != NULL) {
+            int tam = strlen(Tempchar);
+            if (tam > 0 && Tempchar[tam-1] == '\n') Tempchar[tam-1] = '\0';
+            else limparBuffer();
+            if (sscanf(Tempchar, "%d", &valor) == 1) {
+                return valor;
+            }
+        }
+        printf("Entrada inválida. Digite um número inteiro.\n");
+    }
+}
+
+//registrar o livro
+void cadastrarLivro(){
+    Books *NewL = (Books *)malloc(sizeof(Books));
+    NewL->id = nextIDbook(raizeslivros);
+
+    printf("\n> CADASTRO DE LIVRO\n");
+    printf("> ID gerado para o \n  livro automaticamente: %d\n", NewL->id);
+    lerString(NewL->titulo, 100, "Título: ");
+    lerString(NewL->autor, 100, "Autor: ");
+    NewL->ano = lerInteiro("Ano de publicação: ");
+    NewL->status = 0;
+    NewL->Emprestadoemail[0] = '\0';
+    raizeslivros = InsertNewBook(raizeslivros, NewL);
+    printf("> LIVRO CADASTRADO ");
+}
+
+//consultar livro
+void consultarLivro(){
+    int opcao;
+    printf("\n> CONSULTA DE LIVROS:\n");
+    printf("|     por código (ID)    |\n");
+    printf("|        por autor       |\n");
+    printf("| Listar todos os livros |\n");
+    opcao = lerInteiro("Opção: ");
+    //por livro com ID
+    if(opcao == 1){
+        int id = lerInteiro("Digite o id do livro: ");
+        Books *acharlivro = findBook(raizeslivros, id);
+        if(acharlivro != NULL){
+            printf("\n> DADOS DO LIVRO: \n|   ID:  %d | \n|título: %s | \n| autor: %s |\n|  ano:  %d |\n |status : %s|", acharlivro->id, acharlivro->titulo, acharlivro->autor, acharlivro->ano, (acharlivro->status == 0 ) ? "Disponível" : "Emprestado");
+        }
+        else printf("Livro não encontrado");
+    }
+    //livros por autor
+    if(opcao == 2){
+        char autor[100];
+        lerString(autor, 100, "Digite o nome do autor");
+        printf("\n> Livros de Sr.(a) %s", autor);
+        ListBooksperAuthor(raizeslivros, autor);
+    }
+    if(opcao == 3){
+        if(raizeslivros == NULL) printf(">Nenhum livro encontrado\n");
+        else {
+            printf("> lista de todos os livros\n");
+            ListBooks(raizeslivros);
+        }
+    }
+    else printf("Operação inválida");
+}
+
+//void atualizar o livro
+void devolverLivro(){
+    
 }
