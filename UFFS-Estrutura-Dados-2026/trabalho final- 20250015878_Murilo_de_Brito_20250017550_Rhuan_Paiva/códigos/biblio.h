@@ -3,6 +3,7 @@
 typedef struct Usuario{
     char email[100];
     char nome[100];
+    struct Usuario *next;
 } Users;
 
 typedef struct Noparaousuario{
