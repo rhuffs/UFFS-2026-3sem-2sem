@@ -6,11 +6,6 @@ typedef struct Usuario{
     struct Usuario *next;
 } Users;
 
-typedef struct Noparaousuario{
-    Users *U;//->conseguir acessar a struct (Users)
-    struct Noparaousuario *esq;
-    struct Noparaousuario *direita;
-} NoUser;
 
 //árvore para o livro
 typedef struct Livro{
