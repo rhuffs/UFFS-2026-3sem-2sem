@@ -1,4 +1,3 @@
-
 //árvore para o usuário
 typedef struct Usuario{
     char email[100];
@@ -72,4 +71,3 @@ void deleteBook();
 void loanBook();
 
 void updatebook();
-
