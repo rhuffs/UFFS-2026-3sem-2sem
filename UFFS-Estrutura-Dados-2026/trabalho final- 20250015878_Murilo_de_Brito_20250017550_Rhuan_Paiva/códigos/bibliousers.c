@@ -70,3 +70,17 @@ void listarEmprestimos(NoBooks *raiz, char *email){
 
     listarEmprestimos(raiz->dir, email);
 }
+
+
+void atualizaUsuarios(Users *lista, char email[]){
+    Users *usuario = consultaUser(lista, email);
+
+    if (usuario == NULL) {
+        printf("Usuario nao encontrado.\n");
+        return;
+    }
+
+    
+
+   
+}
