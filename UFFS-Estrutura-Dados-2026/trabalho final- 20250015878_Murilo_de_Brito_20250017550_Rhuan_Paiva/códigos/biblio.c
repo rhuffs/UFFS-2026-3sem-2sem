@@ -288,7 +288,7 @@ NoBooks* deleteBook(NoBooks *raizeslivros){
         return raizeslivros;
     }
     printf("Tem certeza que deseja excluir o livro '%s'?\n> (1-Sim / 0-Não): ", livro->titulo);
-    int confirm = lerInteiro("");
+    int confirm = lerInteiro("1 - sim/0 - não");
     if(confirm == 1) {
         raizeslivros = removeBook(raizeslivros, id); 
         printf("Livro deletado com sucesso!\n");
