@@ -66,7 +66,6 @@ int main() {
                 
                 do{
                     menuCadastro();
-                    printf("Escolha uma opção: ");
                     opCad = lerInteiro("Escolha uma opção: ");
                     switch (opCad){
                     case 1:
@@ -103,7 +102,6 @@ int main() {
             case 2:
                 do{
                     menuConsulta();
-                    printf("Escolha uma opção: ");
                     opConsul = lerInteiro("Escolha uma opção: ");
                     switch (opConsul){
                     case 1:
@@ -149,7 +147,6 @@ int main() {
             case 3:
                 do{
                     menuAtualizacao();
-                    printf("Escolha uma opção: ");
                     opAtu = lerInteiro("Escolha uma opção: ");
                     switch (opAtu){
                     case 1:
@@ -178,7 +175,6 @@ int main() {
             case 4:
                 do{
                     menuExclusao();
-                    printf("Escolha uma opção: ");
                     opExcluir = lerInteiro("Escolha uma opção: ");
                     switch (opExcluir){
                     case 1:
