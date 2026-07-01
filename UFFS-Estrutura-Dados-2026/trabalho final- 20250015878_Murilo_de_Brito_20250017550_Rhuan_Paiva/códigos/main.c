@@ -3,6 +3,8 @@
 #include <string.h>
 #include "biblio.h"
 
+//Raízes
+NoBooks *raizeslivros = NULL;
 void menuPrincipal() {
     printf("========= Menu =========\n");
     printf("| 1. Cadastro          |\n");
@@ -69,7 +71,7 @@ int main() {
                     opCad = lerInteiro("Escolha uma opção: ");
                     switch (opCad){
                     case 1:
-                        cadastrarLivro();
+                        cadastrarLivro(raizeslivros);
                         break;
 
                     case 2: {
@@ -105,7 +107,7 @@ int main() {
                     opConsul = lerInteiro("Escolha uma opção: ");
                     switch (opConsul){
                     case 1:
-                        consultarLivro();
+                        consultarLivro(raizeslivros);
                         break;
 
                     case 2 : {
@@ -150,7 +152,7 @@ int main() {
                     opAtu = lerInteiro("Escolha uma opção: ");
                     switch (opAtu){
                     case 1:
-                        updatebook(); 
+                        updatebook(raizeslivros); 
                         break;
 
                     case 2: {
@@ -178,7 +180,7 @@ int main() {
                     opExcluir = lerInteiro("Escolha uma opção: ");
                     switch (opExcluir){
                     case 1:
-                        deleteBook();
+                        deleteBook(raizeslivros);
                         break;
 
                     case 2: {
@@ -201,11 +203,11 @@ int main() {
                 break;
 
             case 5:
-                loanBook();
+                loanBook(raizeslivros);
                 break;
 
             case 6:
-                devolverLivro();
+                devolverLivro(raizeslivros);
                 break;
 
             case 0:

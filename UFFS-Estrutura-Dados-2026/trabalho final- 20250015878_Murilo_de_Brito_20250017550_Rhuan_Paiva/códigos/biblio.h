@@ -24,7 +24,6 @@ typedef struct Noparaolivro{
     struct Noparaolivro *dir;
 } NoBooks;
 
-extern NoBooks *raizeslivros;//->LLM
 //-->allocar o novo livro no espaço de memoria
 NoBooks *NoPlivro(Books *);
 
