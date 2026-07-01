@@ -438,7 +438,6 @@ void atualizaUsuarios(Users *lista, char *email){
         printf("Usuario não encontrado.\n");
         return;
     }
-    printf("Digite o novo nome: ");
     lerString(usuario->nome, 100, "Digite o novo nome usuario: ");
     printf("Nome atualizado com sucesso."); //Lê a linha inteira, inclusive espaços.O espaço antes do % faz o scanf ignorar o '\n' que ficou no buffer.99 evita escrever além do tamanho do vetor.
 }
