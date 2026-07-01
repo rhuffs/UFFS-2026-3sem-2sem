@@ -52,7 +52,7 @@ void ListBooksperAuthor(NoBooks *, char *);
 void ReleaseBook(NoBooks *);
 
 //-->limpa o buffer de entrada(ENTER)
-void limparBuffer();
+void limparBuffer();// LLM
 //-->scanf para string
 int lerString(char *, int , char *);
 

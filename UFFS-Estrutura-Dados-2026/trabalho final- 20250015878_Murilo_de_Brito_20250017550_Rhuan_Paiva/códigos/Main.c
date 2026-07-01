@@ -73,21 +73,21 @@ int main() {
                         cadastrarLivro();
                         break;
 
-                    case 2:
+                    case 2: {
 
                         char nome[100];
                         char email[100];
 
                         printf("Digite o nome do usuario: ");
-                        scanf(" %[^\n]", nome);//lê uma linha inteira, incluindo espaços
+                        scanf(" %99[^\n]", nome);//lê uma linha inteira, incluindo espaços
 
                         printf("Digite o email do usuario: ");
-                        scanf(" %[^\n]", email);
+                        scanf(" %99[^\n]", email);
 
                         lista = CadastrarUsuarios(lista, nome, email);
 
                         break;
-
+                    } 
                     case 0:
                         printf("0: Voltar\n");
                         break;
@@ -110,10 +110,10 @@ int main() {
                         consultarLivro();
                         break;
 
-                    case 2 :
+                    case 2 : {
                         char email[100];
                         printf("Digite o email do usuario: ");
-                        scanf(" %[^\n]", email);
+                        scanf(" %99[^\n]", email);
 
                         Users *usuario = consultaUser(lista, email);
 
@@ -126,12 +126,14 @@ int main() {
                         }
 
                         break;
-
-                    case 3:
+                    }
+                    case 3: {
                         char email[100];
-                        listarEmprestimos(NoBooks *raiz, email);
+                        printf("Digite o email do usuario: ");
+                        scanf(" %99[^\n]", email);
+                        listarEmprestimos(raizeslivros, email);
                         break;
-
+                    }
                     case 0:
                         printf("0: Voltar\n");
                         break;
@@ -141,7 +143,7 @@ int main() {
                         break;
                     }
 
-                }while(opCad !=0);
+                }while(opConsul !=0);
                 break;
 
             case 3:
@@ -154,13 +156,13 @@ int main() {
                         updatebook(); 
                         break;
 
-                    case 2:
+                    case 2: {
                         char email[100];
                         printf("Digite o email do usuario: ");
-                        scanf(" %[^\n]", email);
+                        scanf("%99[^\n]", email);
                         atualizaUsuarios(lista, email);
                         break;
-
+                    }
                     case 0:
                         printf("0: Voltar\n");
                         break;
@@ -170,7 +172,7 @@ int main() {
                         break;
                     }
 
-                }while(opCad !=0);
+                }while(opAtu !=0);
                 break;
 
             case 4:
@@ -183,13 +185,13 @@ int main() {
                         deleteBook();
                         break;
 
-                    case 2:
+                    case 2: {
                         char email[100];
                         printf("Digite o email do usuario: ");
-                        scanf(" %[^\n]", email);
-                        excluirUsuario(lista, email);
+                        scanf("%99[^\n]", email);
+                        lista = excluirUsuario(lista, email);
                         break;
-
+                    }
                     case 0:
                         printf("0: Voltar\n");
                         break;
@@ -199,7 +201,7 @@ int main() {
                         break;
                     }
 
-                }while(opCad !=0);
+                }while(opExcluir !=0);
                 break;
 
             case 5:
