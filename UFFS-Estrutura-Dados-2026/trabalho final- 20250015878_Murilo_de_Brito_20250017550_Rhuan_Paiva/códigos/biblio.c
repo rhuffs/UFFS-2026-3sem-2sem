@@ -437,7 +437,12 @@ void atualizaUsuarios(Users *lista, char *email){
     printf("Nome atualizado com sucesso."); //Lê a linha inteira, inclusive espaços.O espaço antes do % faz o scanf ignorar o '\n' que ficou no buffer.99 evita escrever além do tamanho do vetor.
 }
 
-Users *excluirUsuario(Users *lista, char *email) {
+Users *excluirUsuario(Users *lista, NoBooks *raizLivros, char *email) {
+
+    if (usuarioTemEmprestimo(raizLivros, email)) {
+        printf("Usuario não pode ser excluido: possui livros emprestados.\n");
+        return lista;
+    }
 
     Users *atual = lista;
     Users *anterior = NULL;
@@ -457,7 +462,18 @@ Users *excluirUsuario(Users *lista, char *email) {
     } else {
         anterior->next = atual->next;
     }
+
     free(atual);
+
     printf("Usuario removido com sucesso!\n");
     return lista;
+}
+int usuarioTemEmprestimo(NoBooks *raiz, char *email) {
+    if (raiz == NULL) return 0;
+
+    if (raiz->Livro != NULL &&raiz->Livro->status == 1 && strcmp(raiz->Livro->Emprestadoemail, email) == 0) {
+        return 1;
+    }
+
+    return usuarioTemEmprestimo(raiz->esq, email) || usuarioTemEmprestimo(raiz->dir, email);
 }

@@ -89,4 +89,6 @@ void listarEmprestimos(NoBooks *, char *);
 void atualizaUsuarios(Users *, char *);
 
 // Exclui um usuario
-Users *excluirUsuario(Users *, char *);
+Users *excluirUsuario(Users *,NoBooks *, char *);
+
+int usuarioTemEmprestimo(NoBooks *raiz, char *email);
