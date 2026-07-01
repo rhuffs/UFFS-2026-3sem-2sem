@@ -63,7 +63,6 @@ int main() {
 
     do {
         menuPrincipal();
-        printf("Escolha uma opção: ");
         op = lerInteiro("Escolha uma opção: ");
 
         switch (op) {
@@ -181,7 +180,7 @@ int main() {
                     case 2: {
                         char email[100];
                         lerString(email,100,"Digite o email do usuario:");
-                        lista = excluirUsuario(lista, email);
+                        lista = excluirUsuario(lista,raizeslivros, email);
                         break;
                     }
                     case 0:
