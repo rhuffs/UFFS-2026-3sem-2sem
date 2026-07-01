@@ -28,7 +28,6 @@ NoBooks *InsertNewBook(NoBooks *raizL, Books *Livro){
             else if(aux->Livro->id < Livro->id) aux = aux->dir;
             else{
                 printf("!!ERROR!!\n>ID(%d) do livro já existe", Livro->id);
-                free(Livro);
                 free(NewL);
                 return raizL;
             }
@@ -60,7 +59,6 @@ NoBooks *ExtremeBook(NoBooks *raizL, int buscarMinimo) {
 
 // Gerar próximo ID automaticamente
 int nextIDbook(NoBooks *raizL) {
-    srand(time(NULL));
     int id;
     do {
         id = rand() % 1000000 + 1;  // ID entre 1 e 1.000.000
@@ -75,47 +73,44 @@ NoBooks *removeBook(NoBooks *raiz, int id) {
         return NULL;
     }
 
-    if (id < raiz->Livro->id) raiz->esq = removeBook(raiz->esq, id);
-     else if (id > raiz->Livro->id) raiz->dir = removeBook(raiz->dir, id);
-     else {
+    if (id < raiz->Livro->id)
+        raiz->esq = removeBook(raiz->esq, id);
+    else if (id > raiz->Livro->id)
+        raiz->dir = removeBook(raiz->dir, id);
+    else {
         if (raiz->esq == NULL) {
             NoBooks *aux = raiz->dir;
-            free(raiz->Livro);  
-            free(raiz);         
+            free(raiz->Livro);
+            free(raiz);
             return aux;
         }
         if (raiz->dir == NULL) {
             NoBooks *aux = raiz->esq;
-            free(raiz->Livro);  
-            free(raiz);         
+            free(raiz->Livro);
+            free(raiz);
             return aux;
         }
-        
         NoBooks *aux = raiz->dir;
         NoBooks *pai = raiz;
         while (aux->esq != NULL) {
             pai = aux;
             aux = aux->esq;
         }
-        
-        raiz->Livro->id = aux->Livro->id;
-        strcpy(raiz->Livro->titulo, aux->Livro->titulo);
-        strcpy(raiz->Livro->autor, aux->Livro->autor);
-        raiz->Livro->ano = aux->Livro->ano;
-        raiz->Livro->status = aux->Livro->status;
-        strcpy(raiz->Livro->Emprestadoemail, aux->Livro->Emprestadoemail);
-        if (pai == raiz) {
+
+        *raiz->Livro = *aux->Livro;
+
+        // Remove o sucessor
+        if (pai == raiz)
             pai->dir = aux->dir;
-        } else {
+        else
             pai->esq = aux->dir;
-        }
-        
+
         free(aux->Livro);
         free(aux);
     }
-    
     return raiz;
 }
+
 
 //listar os livros->in order
 void ListBooks(NoBooks *RaizL){

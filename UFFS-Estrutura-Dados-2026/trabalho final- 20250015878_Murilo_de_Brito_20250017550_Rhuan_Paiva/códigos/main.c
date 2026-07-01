@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "biblio.h"
 
 //Raízes
@@ -51,6 +52,7 @@ void menuExclusao(){
 }
 
 int main() {
+    srand(time(NULL)); 
     NoBooks *raizeslivros = NULL;   
     Users *lista = NULL;
     int op;
