@@ -4,7 +4,7 @@
 #include "biblio.h"
 
 //Raízes
-NoBooks *raizeslivros = NULL;
+
 void menuPrincipal() {
     printf("========= Menu =========\n");
     printf("| 1. Cadastro          |\n");
@@ -51,6 +51,7 @@ void menuExclusao(){
 }
 
 int main() {
+    NoBooks *raizeslivros = NULL;   
     Users *lista = NULL;
     int op;
     int opCad;
@@ -71,7 +72,7 @@ int main() {
                     opCad = lerInteiro("Escolha uma opção: ");
                     switch (opCad){
                     case 1:
-                        cadastrarLivro(raizeslivros);
+                        raizeslivros = cadastrarLivro(raizeslivros);
                         break;
 
                     case 2: {
@@ -180,7 +181,7 @@ int main() {
                     opExcluir = lerInteiro("Escolha uma opção: ");
                     switch (opExcluir){
                     case 1:
-                        deleteBook(raizeslivros);
+                        raizeslivros = deleteBook(raizeslivros);
                         break;
 
                     case 2: {
