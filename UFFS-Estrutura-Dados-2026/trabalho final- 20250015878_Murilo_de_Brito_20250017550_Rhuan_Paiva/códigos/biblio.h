@@ -74,3 +74,20 @@ void deleteBook();
 void loanBook();
 
 void updatebook();
+
+//Usuarios
+
+//Cadastra usuarios
+Users *CadastrarUsuarios(Users *,char *, char *);
+
+//Consulta usuarios
+Users *consultaUser(Users *, char *);
+
+//Lista os empréstimos
+void listarEmprestimos(NoBooks *, char *);
+
+//Atualiza o nome de um usuario
+void atualizaUsuarios(Users *, char *);
+
+// Exclui um usuario
+Users *excluirUsuario(Users *, char *);

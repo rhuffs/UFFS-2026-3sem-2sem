@@ -49,7 +49,7 @@ void menuExclusao(){
 }
 
 int main() {
-
+    Users *lista = NULL;
     int op;
     int opCad;
     int opExcluir;
@@ -74,7 +74,18 @@ int main() {
                         break;
 
                     case 2:
-                        printf("2: Usuarios\n");
+
+                        char nome[100];
+                        char email[100];
+
+                        printf("Digite o nome do usuario: ");
+                        scanf(" %[^\n]", nome);//lê uma linha inteira, incluindo espaços
+
+                        printf("Digite o email do usuario: ");
+                        scanf(" %[^\n]", email);
+
+                        lista = CadastrarUsuarios(lista, nome, email);
+
                         break;
 
                     case 0:
@@ -99,12 +110,26 @@ int main() {
                         consultarLivro();
                         break;
 
-                    case 2:
-                        printf("2: Usuarios\n");
+                    case 2 :
+                        char email[100];
+                        printf("Digite o email do usuario: ");
+                        scanf(" %[^\n]", email);
+
+                        Users *usuario = consultaUser(lista, email);
+
+                        if (usuario == NULL) {
+                            printf("Usuario nao encontrado.\n");
+                        } else {
+                            printf("\nUsuario encontrado!\n");
+                            printf("Nome : %s\n", usuario->nome);
+                            printf("Email: %s\n", usuario->email);
+                        }
+
                         break;
 
                     case 3:
-                        printf("0: Empréstimos\n");
+                        char email[100];
+                        listarEmprestimos(NoBooks *raiz, email);
                         break;
 
                     case 0:
@@ -130,7 +155,10 @@ int main() {
                         break;
 
                     case 2:
-                        printf("2: Usuarios\n");
+                        char email[100];
+                        printf("Digite o email do usuario: ");
+                        scanf(" %[^\n]", email);
+                        atualizaUsuarios(lista, email);
                         break;
 
                     case 0:
@@ -156,7 +184,10 @@ int main() {
                         break;
 
                     case 2:
-                        printf("2: Usuarios\n");
+                        char email[100];
+                        printf("Digite o email do usuario: ");
+                        scanf(" %[^\n]", email);
+                        excluirUsuario(lista, email);
                         break;
 
                     case 0:

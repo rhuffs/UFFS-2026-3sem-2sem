@@ -72,17 +72,18 @@ void listarEmprestimos(NoBooks *raiz, char *email){
 }
 
 
-void atualizaUsuarios(Users *lista, char email[]){
+void atualizaUsuarios(Users *lista, char *email){
     Users *usuario = consultaUser(lista, email);
     if (usuario == NULL){
         printf("Usuario não encontrado.\n");
         return;
     }
     printf("Digite o novo nome: ");
-    scanf(" %99[^\n]", usuario->nome); //Lê a linha inteira, inclusive espaços.O espaço antes do % faz o scanf ignorar o '\n' que ficou no buffer.99 evita escrever além do tamanho do vetor.
+    scanf(" %99[^\n]", usuario->nome);
+    printf("Nome atualizado com sucesso."); //Lê a linha inteira, inclusive espaços.O espaço antes do % faz o scanf ignorar o '\n' que ficou no buffer.99 evita escrever além do tamanho do vetor.
 }
 
-Users *excluirUsuario(Users *lista, char email[]) {
+Users *excluirUsuario(Users *lista, char *email) {
 
     Users *atual = lista;
     Users *anterior = NULL;
