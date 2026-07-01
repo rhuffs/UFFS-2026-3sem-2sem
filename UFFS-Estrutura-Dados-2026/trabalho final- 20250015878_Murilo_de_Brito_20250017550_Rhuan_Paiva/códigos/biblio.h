@@ -92,3 +92,5 @@ void atualizaUsuarios(Users *, char *);
 Users *excluirUsuario(Users *,NoBooks *, char *);
 
 int usuarioTemEmprestimo(NoBooks *raiz, char *email);
+
+void liberarUsuarios(Users *);
