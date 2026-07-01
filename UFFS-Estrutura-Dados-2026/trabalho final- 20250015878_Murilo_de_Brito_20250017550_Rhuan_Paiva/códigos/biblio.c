@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <string.h>
 #include "biblio.h"
 
@@ -59,9 +60,12 @@ NoBooks *ExtremeBook(NoBooks *raizL, int buscarMinimo) {
 
 // Gerar próximo ID automaticamente
 int nextIDbook(NoBooks *raizL) {
-    if (raizL == NULL) return 1;//1 = mínimo
-    NoBooks *maior = ExtremeBook(raizL, 0);  // 0 = máximo
-    return maior->Livro->id + 1;
+    srand(time(NULL));
+    int id;
+    do {
+        id = rand() % 1000000 + 1;  // ID entre 1 e 1.000.000
+    } while(findBook(raizL, id) != NULL);  // Garantir que não existe
+    return id;
 }
 
 //remover os Livros
@@ -128,7 +132,6 @@ void ListBooksperAuthor(NoBooks *raiz, char *autor){
     
     ListBooksperAuthor(raiz->esq, autor);
 
-    // CORREÇÃO: Adicionada verificação de NULL para evitar crash
     if(raiz->Livro != NULL && autor != NULL) {
         if(strcmp(raiz->Livro->autor, autor) == 0){
             printf("|ID: %d | título: %s | ano: %d | status: %s|\n",
@@ -146,7 +149,7 @@ void ReleaseBook(NoBooks *RaizL){
     if(RaizL == NULL) return;
     ReleaseBook(RaizL->esq);
     ReleaseBook(RaizL->dir);
-    // CORREÇÃO: Verificar se Livro existe antes de liberar
+
     if(RaizL->Livro) free(RaizL->Livro);
     free(RaizL);
 }
@@ -190,12 +193,12 @@ int lerInteiro(char *mensagem) {
 }
 
 //registrar o livro
-void cadastrarLivro(NoBooks *raizeslivros){
+NoBooks *cadastrarLivro(NoBooks *raizeslivros){
     Books *NewL = (Books *)malloc(sizeof(Books));
-    // CORREÇÃO: Adicionada verificação de alocação de memória
+
     if(!NewL) {
         printf("Erro ao alocar memória\n");
-        return;
+        return raizeslivros;
     }
     
     NewL->id = nextIDbook(raizeslivros);
@@ -209,8 +212,10 @@ void cadastrarLivro(NoBooks *raizeslivros){
     NewL->Emprestadoemail[0] = '\0';
     
     raizeslivros = InsertNewBook(raizeslivros, NewL);
-    // CORREÇÃO: Mensagem mais clara
+
     printf("> LIVRO CADASTRADO COM SUCESSO!\n");
+
+    return raizeslivros;  
 }
 
 //consultar livro
@@ -232,7 +237,7 @@ void consultarLivro(NoBooks *raizeslivros){
             printf("| Autor:  %s |\n", acharlivro->autor);
             printf("|   Ano:  %d |\n", acharlivro->ano);
             printf("| Status: %s |\n", (acharlivro->status == 0) ? "Disponível" : "Emprestado");
-            // CORREÇÃO: Mostrar email se estiver emprestado
+
             if(acharlivro->status == 1)
                 printf("| Usuário: %s |\n", acharlivro->Emprestadoemail);
         } else {
@@ -251,7 +256,7 @@ void consultarLivro(NoBooks *raizeslivros){
             ListBooks(raizeslivros);
         }
     } else {
-        // CORREÇÃO: Mensagem mais clara
+
         printf("Operação inválida\n");
     }
 }
@@ -268,25 +273,24 @@ void devolverLivro(NoBooks *raizeslivros){
         printf("O livro '%s' não está emprestado\n", livro->titulo); 
         return;
     }
-    // CORREÇÃO: Melhor formatação da mensagem
     printf("Devolução do livro '%s', emprestado para %s\n", livro->titulo, livro->Emprestadoemail);
     livro->status = 0;
     livro->Emprestadoemail[0] = '\0';
     printf("Livro devolvido com sucesso!\n");
 }
 
-void deleteBook(NoBooks *raizeslivros){
+NoBooks* deleteBook(NoBooks *raizeslivros){
     int id = lerInteiro("Digite o ID do livro para remoção: ");
     Books *livro = findBook(raizeslivros, id);
     if(livro == NULL) {
         printf("Livro não encontrado\n"); 
-        return;
+        return raizeslivros;
     }
     if(livro->status == 1) {
-        // CORREÇÃO: Formatação melhor e mostrar título do livro
+
         printf("!!ERROR!!\nO livro '%s' está emprestado para: %s\n", 
                livro->titulo, livro->Emprestadoemail); 
-        return;
+        return raizeslivros;
     }
     printf("Tem certeza que deseja excluir o livro '%s'?\n> (1-Sim / 0-Não): ", livro->titulo);
     int confirm = lerInteiro("");
@@ -296,6 +300,7 @@ void deleteBook(NoBooks *raizeslivros){
     } else {
         printf("Operação cancelada\n");
     }
+    return raizeslivros;
 }
 
 void loanBook(NoBooks *raizeslivros){
@@ -306,7 +311,6 @@ void loanBook(NoBooks *raizeslivros){
         return;
     }
     if(livro->status == 1) {
-        // CORREÇÃO: Mostrar título do livro
         printf("O livro '%s' já está emprestado para: %s\n", 
                livro->titulo, livro->Emprestadoemail); 
         return;

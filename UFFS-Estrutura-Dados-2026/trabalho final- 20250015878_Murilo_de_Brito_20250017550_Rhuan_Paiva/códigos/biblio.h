@@ -59,20 +59,20 @@ int lerString(char *, int , char *);
 int lerInteiro(char *);
 
 //-->cadastrar o livro
-void cadastrarLivro();
+NoBooks *cadastrarLivro(NoBooks *); 
 
 //_>consultar o livro
-void consultarLivro();
+void consultarLivro(NoBooks *raizeslivros);
 
 //->>devolver o livro
-void devolverLivro();
+void devolverLivro(NoBooks *raizeslivros);
 
 //->remover o livro
-void deleteBook();
+NoBooks* deleteBook(NoBooks *raizeslivros); 
 //-->emprestaro o livro
-void loanBook();
+void loanBook(NoBooks *raizeslivros);
 
-void updatebook();
+void updatebook(NoBooks *raizeslivros);
 
 //Usuarios
 
