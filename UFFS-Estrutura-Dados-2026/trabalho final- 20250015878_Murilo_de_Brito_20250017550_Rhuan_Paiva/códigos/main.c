@@ -197,7 +197,7 @@ int main() {
                 break;
 
             case 5:
-                loanBook(raizeslivros);
+                loanBook(raizeslivros, lista);
                 break;
 
             case 6:
@@ -213,6 +213,8 @@ int main() {
         }
 
     } while (op != 0);
-
+    
+    ReleaseBook(raizeslivros);
+    liberarUsuarios(lista);
     return 0;
 }

@@ -298,26 +298,38 @@ NoBooks* deleteBook(NoBooks *raizeslivros){
     return raizeslivros;
 }
 
-void loanBook(NoBooks *raizeslivros){
+void loanBook(NoBooks *raizeslivros, Users *lista) {
+    if (raizeslivros == NULL) {
+        printf("Nenhum livro cadastrado.\n");
+        return;
+    }
+
     int id = lerInteiro("Digite o ID do livro: ");
     Books *livro = findBook(raizeslivros, id);
-    if(livro == NULL) {
-        printf("Livro não encontrado\n"); 
+    if (livro == NULL) {
+        printf("Livro não encontrado\n");
         return;
     }
-    if(livro->status == 1) {
+    if (livro->status == 1) {
         printf("O livro '%s' já está emprestado para: %s\n", 
-               livro->titulo, livro->Emprestadoemail); 
+               livro->titulo, livro->Emprestadoemail);
         return;
     }
-    char insertemail[100];
-    lerString(insertemail, 100, "Digite o e-mail do usuário: ");
-        livro->status = 1;
-    strcpy(livro->Emprestadoemail, insertemail);
-    
-    printf("✓ Empréstimo realizado com sucesso!\n");
+
+    char email[100];
+    lerString(email, 100, "Digite o e-mail do usuário: ");
+
+    Users *usuario = consultaUser(lista, email);
+    if (usuario == NULL) {
+        printf("Usuário não cadastrado. Empréstimo cancelado.\n");
+        return;
+    }
+
+    livro->status = 1;
+    strcpy(livro->Emprestadoemail, email);
+    printf(" Empréstimo realizado com sucesso!\n");
     printf("  Livro: %s\n", livro->titulo);
-    printf("  Usuário: %s\n", insertemail);
+    printf("  Usuário: %s\n", email);
 }
 
 void updatebook(NoBooks *raizeslivros){
@@ -353,6 +365,14 @@ void updatebook(NoBooks *raizeslivros){
             break;
         default:
             printf("Opção inválida!\n");
+    }
+}
+void liberarUsuarios(Users *lista) {
+    Users *aux;
+    while (lista != NULL) {
+        aux = lista;
+        lista = lista->next;
+        free(aux);
     }
 }
 

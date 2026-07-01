@@ -70,9 +70,9 @@ void devolverLivro(NoBooks *raizeslivros);
 //->remover o livro
 NoBooks* deleteBook(NoBooks *raizeslivros); 
 //-->emprestaro o livro
-void loanBook(NoBooks *raizeslivros);
+void loanBook(NoBooks *, Users *);
 
-void updatebook(NoBooks *raizeslivros);
+void updatebook(NoBooks *);
 
 //Usuarios
 
@@ -90,3 +90,5 @@ void atualizaUsuarios(Users *, char *);
 
 // Exclui um usuario
 Users *excluirUsuario(Users *, char *);
+
+void liberarUsuarios(Users *);
