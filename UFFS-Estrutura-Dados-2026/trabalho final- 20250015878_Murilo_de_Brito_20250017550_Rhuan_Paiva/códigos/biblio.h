@@ -1,4 +1,4 @@
-//árvore para o usuário
+//lista simples para o usuário
 typedef struct Usuario{
     char email[100];
     char nome[100];

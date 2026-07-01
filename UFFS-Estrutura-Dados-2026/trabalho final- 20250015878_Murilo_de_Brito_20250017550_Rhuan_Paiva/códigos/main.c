@@ -82,12 +82,8 @@ int main() {
                         char nome[100];
                         char email[100];
 
-                        printf("Digite o nome do usuario: ");
-                        scanf(" %99[^\n]", nome);//lê uma linha inteira, incluindo espaços
-
-                        printf("Digite o email do usuario: ");
-                        scanf(" %99[^\n]", email);
-
+                        lerString(nome,100,"Digite o nome do usuario:");
+                        lerString(email,100,"Digite o email do usuario:");
                         lista = CadastrarUsuarios(lista, nome, email);
 
                         break;
@@ -115,9 +111,7 @@ int main() {
 
                     case 2 : {
                         char email[100];
-                        printf("Digite o email do usuario: ");
-                        scanf(" %99[^\n]", email);
-
+                        lerString(email,100,"Digite o email do usuario:");
                         Users *usuario = consultaUser(lista, email);
 
                         if (usuario == NULL) {
@@ -132,8 +126,7 @@ int main() {
                     }
                     case 3: {
                         char email[100];
-                        printf("Digite o email do usuario: ");
-                        scanf(" %99[^\n]", email);
+                        lerString(email,100,"Digite o email do usuario:");
                         listarEmprestimos(raizeslivros, email);
                         break;
                     }
@@ -160,8 +153,7 @@ int main() {
 
                     case 2: {
                         char email[100];
-                        printf("Digite o email do usuario: ");
-                        scanf("%99[^\n]", email);
+                        lerString(email,100,"Digite o email do usuario:");
                         atualizaUsuarios(lista, email);
                         break;
                     }
@@ -188,8 +180,7 @@ int main() {
 
                     case 2: {
                         char email[100];
-                        printf("Digite o email do usuario: ");
-                        scanf("%99[^\n]", email);
+                        lerString(email,100,"Digite o email do usuario:");
                         lista = excluirUsuario(lista, email);
                         break;
                     }

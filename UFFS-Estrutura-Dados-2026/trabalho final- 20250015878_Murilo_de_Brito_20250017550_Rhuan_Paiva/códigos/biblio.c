@@ -134,7 +134,7 @@ void ListBooksperAuthor(NoBooks *raiz, char *autor){
                 raiz->Livro->titulo,
                 raiz->Livro->ano,
                 (raiz->Livro->status == 0) ? "Disponível" : "Emprestado");
-        }
+    }
     }
 
     ListBooksperAuthor(raiz->dir, autor);
@@ -237,7 +237,7 @@ void consultarLivro(NoBooks *raizeslivros){
                 printf("| Usuário: %s |\n", acharlivro->Emprestadoemail);
         } else {
             printf("Livro não encontrado\n");
-        }
+    }
     } else if(opcao == 2){
         char autor[100];
         lerString(autor, 100, "Digite o nome do autor: ");
@@ -312,7 +312,7 @@ void loanBook(NoBooks *raizeslivros){
     }
     char insertemail[100];
     lerString(insertemail, 100, "Digite o e-mail do usuário: ");
-    livro->status = 1;
+        livro->status = 1;
     strcpy(livro->Emprestadoemail, insertemail);
     
     printf("✓ Empréstimo realizado com sucesso!\n");
@@ -338,7 +338,7 @@ void updatebook(NoBooks *raizeslivros){
     printf("| 3. Ano    |\n");
     int opcao = lerInteiro("Opção: ");
 
-    switch(opcao) {
+        switch(opcao) {
         case 1:
             lerString(livro->titulo, 100, "Novo título: ");
             printf("\n> Título atualizado com sucesso!\n");
@@ -434,7 +434,7 @@ void atualizaUsuarios(Users *lista, char *email){
         return;
     }
     printf("Digite o novo nome: ");
-    scanf(" %99[^\n]", usuario->nome);
+    lerString(usuario->nome, 100, "Digite o novo nome usuario: ");
     printf("Nome atualizado com sucesso."); //Lê a linha inteira, inclusive espaços.O espaço antes do % faz o scanf ignorar o '\n' que ficou no buffer.99 evita escrever além do tamanho do vetor.
 }
 
