@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "biblio.h"
 
 void menuPrincipal() {
@@ -58,7 +59,7 @@ int main() {
     do {
         menuPrincipal();
         printf("Escolha uma opção: ");
-        scanf("%d", &op);
+        op = lerInteiro("Escolha uma opção: ");
 
         switch (op) {
             case 1:
@@ -66,10 +67,10 @@ int main() {
                 do{
                     menuCadastro();
                     printf("Escolha uma opção: ");
-                    scanf("%d", &opCad);
+                    opCad = lerInteiro("Escolha uma opção: ");
                     switch (opCad){
                     case 1:
-                        printf("1: Livros\n");
+                        cadastrarLivro();
                         break;
 
                     case 2:
@@ -92,10 +93,10 @@ int main() {
                 do{
                     menuConsulta();
                     printf("Escolha uma opção: ");
-                    scanf("%d", &opConsul);
+                    opConsul = lerInteiro("Escolha uma opção: ");
                     switch (opConsul){
                     case 1:
-                        printf("1: Livros\n");
+                        consultarLivro();
                         break;
 
                     case 2:
@@ -122,10 +123,10 @@ int main() {
                 do{
                     menuAtualizacao();
                     printf("Escolha uma opção: ");
-                    scanf("%d", &opAtu);
+                    opAtu = lerInteiro("Escolha uma opção: ");
                     switch (opAtu){
                     case 1:
-                        printf("1: Livros\n");
+                        updatebook(); 
                         break;
 
                     case 2:
@@ -148,10 +149,10 @@ int main() {
                 do{
                     menuExclusao();
                     printf("Escolha uma opção: ");
-                    scanf("%d", &opExcluir);
+                    opExcluir = lerInteiro("Escolha uma opção: ");
                     switch (opExcluir){
                     case 1:
-                        printf("1: Livros\n");
+                        deleteBook();
                         break;
 
                     case 2:
@@ -171,11 +172,11 @@ int main() {
                 break;
 
             case 5:
-                printf("Empréstimo\n");
+                loanBook();
                 break;
 
             case 6:
-                printf("Devolução\n");
+                devolverLivro();
                 break;
 
             case 0:

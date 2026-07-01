@@ -45,7 +45,7 @@ Books *findBook(NoBooks *raiz, int id){
         else if(aux->Livro->id > id) aux = aux->esq;
         else aux = aux->dir;
     }
-    return;
+    return NULL;
 }
 
 // Encontrar extremo (mínimo ou máximo)
@@ -106,7 +106,7 @@ NoBooks *removeBook(NoBooks *raiz, int id) {
 void ListBooks(NoBooks *RaizL){
     if(RaizL == NULL) return;
     ListBooks(RaizL->esq);
-    printf("|ID: %d | título: %s | autor: %s | ano: %d | status : %s|", RaizL->Livro->id, RaizL->Livro->titulo, RaizL->Livro->autor, RaizL->Livro->ano, (RaizL->Livro->status == 0 ) ? "Disponível" : "Emprestado");
+    printf("|ID: %d | título: %s | autor: %s | ano: %d | status : %s|\n", RaizL->Livro->id, RaizL->Livro->titulo, RaizL->Livro->autor, RaizL->Livro->ano, (RaizL->Livro->status == 0 ) ? "Disponível" : "Emprestado");
     if(RaizL->Livro->status == 1) printf("> Usuário com o livro: %s", RaizL->Livro->Emprestadoemail);
     ListBooks(RaizL->dir);
 }
@@ -175,28 +175,29 @@ void cadastrarLivro(){
     printf("\n> CADASTRO DE LIVRO\n");
     printf("> ID gerado para o \n  livro automaticamente: %d\n", NewL->id);
     lerString(NewL->titulo, 100, "Título: ");
+    printf("\n");
     lerString(NewL->autor, 100, "Autor: ");
     NewL->ano = lerInteiro("Ano de publicação: ");
     NewL->status = 0;
     NewL->Emprestadoemail[0] = '\0';
     raizeslivros = InsertNewBook(raizeslivros, NewL);
-    printf("> LIVRO CADASTRADO ");
+    printf("> LIVRO CADASTRADO \n");
 }
 
 //consultar livro
 void consultarLivro(){
     int opcao;
     printf("\n> CONSULTA DE LIVROS:\n");
-    printf("|     por código (ID)    |\n");
-    printf("|        por autor       |\n");
-    printf("| Listar todos os livros |\n");
+    printf("| 1.por código (ID)        |\n");
+    printf("| 2.por autor              |\n");
+    printf("| 3.Listar todos os livros |\n");
     opcao = lerInteiro("Opção: ");
     //por livro com ID
     if(opcao == 1){
         int id = lerInteiro("Digite o id do livro: ");
         Books *acharlivro = findBook(raizeslivros, id);
         if(acharlivro != NULL){
-            printf("\n> DADOS DO LIVRO: \n|   ID:  %d | \n|título: %s | \n| autor: %s |\n|  ano:  %d |\n |status : %s|", acharlivro->id, acharlivro->titulo, acharlivro->autor, acharlivro->ano, (acharlivro->status == 0 ) ? "Disponível" : "Emprestado");
+            printf("\n> DADOS DO LIVRO: \n|   ID:  %d | \n|título: %s | \n| autor: %s |\n|  ano:  %d |\n |status : %s|\n", acharlivro->id, acharlivro->titulo, acharlivro->autor, acharlivro->ano, (acharlivro->status == 0 ) ? "Disponível" : "Emprestado");
         }
         else printf("Livro não encontrado");
     }
@@ -221,7 +222,9 @@ void consultarLivro(){
 void devolverLivro(){
     int id = lerInteiro("Digite o ID do livro: ");
     Books *livro = findBook(raizeslivros, id);
-    if(livro == NULL) printf("arquivo não encontrado"); return;
+    if(livro == NULL){
+        printf("arquivo não encontrado"); return;
+    }
     if(livro->status == 0) {
         printf("O livro (%s) não está emprestado", livro->titulo); 
         return;
@@ -248,7 +251,7 @@ void deleteBook(){
     int confirm = lerInteiro("");
     if(confirm == 1) {
         raizeslivros = removeBook(raizeslivros, id); 
-        printf("Arquivo deletado com sucesso");
+        printf("Arquivo deletado com sucesso\n");
     }
     else{
         printf("operação cancelada\n");
@@ -260,7 +263,7 @@ void loanBook(){
     int id = lerInteiro("Digite o ID do livro que queira ser emprestado: ");
     Books *livro = findBook(raizeslivros, id);
     if(livro == NULL) {
-        printf("arquivo não encontrado"); 
+        printf("arquivo não encontrado\n"); 
         return;
     }
     if(livro->status == 1) {
@@ -295,8 +298,8 @@ void updatebook(){
 
     printf("\n> O que deseja alterar?\n");
     printf("| 1. Título |\n");
-    printf("|  2. Autor |\n");
-    printf("|   3. Ano  |\n");
+    printf("| 2. Autor  |\n");
+    printf("| 3. Ano    |\n");
     int opcao = lerInteiro("Opção: ");
 
         switch(opcao) {

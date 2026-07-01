@@ -16,12 +16,15 @@ typedef struct Livro{
     char Emprestadoemail[100];//->de quem emprestou
 } Books;
 
+
+
 typedef struct Noparaolivro{
     Books *Livro;//acessar o conteudo da struct(Books)
     struct Noparaolivro *esq;
     struct Noparaolivro *dir;
 } NoBooks;
 
+extern NoBooks *raizeslivros;//->LLM
 //-->allocar o novo livro no espaço de memoria
 NoBooks *NoPlivro(Books *);
 
